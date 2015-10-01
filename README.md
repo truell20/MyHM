@@ -1,2 +1,5 @@
 # ApPosition
-An app for scheduling at HM
+## TODO
+- Android
+- iOS
+- Backend
