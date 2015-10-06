@@ -1,13 +1,21 @@
 public class Backend
 {
     // Gets the UserData of the user who has the userID given
+    // If the user doesn't exist, a null object is returned
     public static UserData getUserData(int userID) {
-        UserData data = new UserData();
-        data.name = "Michael Truell";
-        data.email = "michael_truell@horacemann.org";
-        data.password = "password";
-        
-        return data;
+        if(userID == 1) {
+            UserData data = new UserData();
+            data.userID = userID;
+            data.firstName = "Michael";
+            data.lastName = "Truell";
+            data.email = "michael_truell@horacemann.org";
+            data.password = "password";
+            
+            return data;
+        } else {
+            System.out.println("That user doesn't exist!");
+            return null;
+        }
     }
     
     /* Returns the userID the user whose email and password match the ones given.

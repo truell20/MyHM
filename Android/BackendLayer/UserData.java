@@ -1,3 +1,4 @@
 public class UserData {
-    public String name, email, password;
+    public int userID;
+    public String firstName, lastName, email, password;
 }
