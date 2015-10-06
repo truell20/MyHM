@@ -23,5 +23,14 @@ public class Backend
         }
     }
     
-    
+    // Gets the schedule of a user using there userID
+    public static Day getSchedule(int userID) {
+        Day day = new Day();
+        for(int a = 0; a < 8; a++) {
+            Period english = new Period();
+            english.activity = "English";
+            day.setPeriod(a, english);
+        }
+        return day;
+    }
 }
