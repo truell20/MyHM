@@ -252,3 +252,4 @@ FakesAssemblies/
 *.opt
 
 *.bluej
+*.ctxt
