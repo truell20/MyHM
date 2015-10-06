@@ -23,8 +23,9 @@ public class Backend
         }
     }
     
-    // Gets the schedule of a user using there userID
-    public static Day getSchedule(int userID) {
+    // Gets a day in a user's schedule using their userID and the number of days this day is removed from today
+    // If distanceFromToday = 0, then today is returned. If distanceFromToday = 1, tomorrow is returned, and so on
+    public static Day getSchedule(int distanceFromToday, int userID) {
         Day day = new Day();
         for(int a = 0; a < 8; a++) {
             Period english = new Period();
