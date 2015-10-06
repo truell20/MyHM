@@ -1,7 +1,0 @@
-#BlueJ class context
-comment0.params=userID
-comment0.target=UserData\ getUserData(int)
-comment1.params=email\ password
-comment1.target=int\ getUserID(java.lang.String,\ java.lang.String)
-comment1.text=\ Returns\ the\ userID\ the\ user\ whose\ email\ and\ password\ match\ the\ ones\ given.\r\n\ If\ there\ is\ no\ user\ with\ that\ combination\ of\ password\ and\ username,\r\n\ -1\ is\ returned.\r\n\ This\ method\ may\ be\ used\ for\ signing\ a\ user\ in.\r\n
-numComments=2
