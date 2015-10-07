@@ -37,6 +37,23 @@ class MyAPI extends API
         }
      }
 
+     protected function userID() {
+        if ($this->method == 'GET' && isset($_GET['email']) && isset($_GET['password'])) {
+            $mysqli = $this->initDB();
+            
+            $email = $_GET['email'];
+            $password = $_GET['password'];
+
+            $sql = "SELECT userID FROM User WHERE email = ".$userID." AND password = ".$password;
+            $res = mysqli_query($mysqli, $sql);
+            $resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
+            
+            return $resultArray;
+        } else {
+            return "Error: Invalid request";
+        }
+     }
+
      protected function classes() {
         if ($this->method == 'GET' && isset($_GET['userID']) && isset($_GET['day'])) {
             $mysqli = $this->initDB();
