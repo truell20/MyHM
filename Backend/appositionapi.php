@@ -24,10 +24,7 @@ class MyAPI extends API
      protected function credentials() {
         if ($this->method == 'GET' && isset($_GET['userID'])) {
             $mysqli = $this->initDB();
-            if (mysqli_connect_errno()) { // If something went wrong
-                print("error"); // print error
-                exit(); // exit out of the program
-            }
+            
             $userID = $_GET['userID'];
 
             $sql = "SELECT firstName, lastName, email, password FROM User WHERE userID = ".$userID;
@@ -36,7 +33,26 @@ class MyAPI extends API
             
             return $resultArray;
         } else {
-            return "Error: Only accepts GET requests with userID argument";
+            return "Error: Invalid request";
+        }
+     }
+
+     protected function classes() {
+        if ($this->method == 'GET' && isset($_GET['userID']) && isset($_GET['day'])) {
+            $mysqli = $this->initDB();
+
+            $userID = $_GET['userID'];
+            $day = $_GET['day'];
+
+            $sql = "SELECT period, name FROM Period WHERE userID = ".$userID." AND day = ".$day;
+            $res = mysqli_query($mysqli, $sql);
+            $resultArray = array();
+            while($holder = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+                array_push($resultArray, $holder);
+            }           
+            return $resultArray;
+        } else {
+            return "Error: Invalid request";
         }
      }
  }
