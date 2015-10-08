@@ -1,0 +1,9 @@
+<?php
+	// www/routing.php
+	if (file_exists(__DIR__ . '\\' . $_SERVER['REQUEST_URI'])) {
+	    return false;
+	} else {
+	    include __DIR__ . '\\api.php?request=credentials';
+	}
+
+?>
