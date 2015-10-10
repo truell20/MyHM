@@ -27,11 +27,44 @@ class MyAPI extends API
             
             $userID = $_GET['userID'];
 
-            $sql = "SELECT firstName, lastName, email, password FROM User WHERE userID = ".$userID;
+            $sql = "SELECT * FROM User WHERE userID = ".$userID;
             $res = mysqli_query($mysqli, $sql);
             $resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
             
             return $resultArray;
+        } else if($this->method == 'PUT'){
+            parse_str($this->file, $putVars);
+            if(!isset($putVars['userID'])) {
+                return "Error: Invalid request";
+            }
+
+            $mysqli = $this->initDB();
+
+            $userID = $putVars['userID'];
+
+            // This will hold the names of the columns that the caller has given us values for
+            $availableColumns = array();
+            $rowsResult = mysqli_query($mysqli, "SHOW COLUMNS FROM User");
+            while ($row = mysqli_fetch_assoc($rowsResult)) {
+                if(isset($putVars[$row['Field']]) && strcmp($row['Field'], "userID") != 0) {
+                    array_push($availableColumns, $row['Field']);
+                }
+            }
+
+            $query = "UPDATE User SET ";
+
+            $numItems = count($availableColumns);
+            $i = 0;
+            foreach($availableColumns as $columnName) {
+                if(++$i == $numItems) $query .= $columnName."='".$putVars[$columnName]."'";
+                else $query .= $columnName."='".$putVars[$columnName]."', ";
+            }
+
+            $query .= " WHERE userID = ".$userID;
+
+            mysqli_query($mysqli, $query);
+
+                return "Success";
         } else {
             return "Error: Invalid request";
         }

@@ -8,7 +8,7 @@
   - Build Personal Schedule Tab (without meetings; just static schedule)
 - Backend
   - ~~Fully implement the getting of a schedule without meetings~~
-  - Store information given in Home Tab
+  - ~~Be able to store currentLocation~~
   - Location on the Home Tab expires once you go to a class
 
 ## Future Todo List
