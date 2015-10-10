@@ -26,4 +26,14 @@ public class Day {
     public ArrayList<Period> getPeriods() {
         return periods;
     }
+    
+    // Prints unique information about this day object. For debugging purposes
+    public String toString() {
+        String returnString = "";
+        for(int a = 0; a < periods.size(); a++) {
+            returnString += "Period " + a + ": " + periods.get(a).toString() + "\n";
+        }
+        
+        return returnString;
+    }
 }

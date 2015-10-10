@@ -51,24 +51,23 @@ public class Backend
     public static int getUserID(String email, String password) {
         String webContents = getText(domain+"userID?email="+email+"&password="+password);
         JSONObject obj = new JSONObject(webContents);
-        String userID = obj.getString("userID");
+        int userID = obj.getInt("userID");
         
-        if(userID != "") {
-            return Integer.parseInt(userID);
-        }
-        
-        return -1;
+        return userID;
     }
     
-    // Gets a day in a user's schedule using their userID and the number of days this day is removed from today
+    // Gets a day in a user's schedule using their userID and the number of the day (ranging from 0 - Day.numberOfPeriods)
     // If distanceFromToday = 0, then today is returned. If distanceFromToday = 1, tomorrow is returned, and so on
-    public static Day getDay(int distanceFromToday, int userID) {
+    public static Day getDay(int dayIndex, int userID) {
+        String webContents = getText(domain+"classes?day="+dayIndex+"&userID="+userID);
+        JSONArray periods = new JSONArray(webContents);
         Day day = new Day();
-        for(int a = 0; a < 8; a++) {
-            Period english = new Period();
-            english.activity = "English";
-            day.setPeriod(a, english);
+        
+        for(int a = 0; a < periods.length(); a++) {
+            JSONObject period = periods.getJSONObject(a);
+            day.setPeriod(period.getInt("period"), new Period(period.getString("name")));
         }
+        
         return day;
     }
     
@@ -79,5 +78,7 @@ public class Backend
         
         System.out.println("ID: " + backend.getUserData(1).lastName);
         System.out.println("ID: " + backend.getUserID("michael_truell@horacemann.org", "password"));
+        System.out.println("ID: " + backend.getDay(0, 1).toString());
+        
     }
 }
