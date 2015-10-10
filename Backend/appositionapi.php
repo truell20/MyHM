@@ -41,14 +41,15 @@ class MyAPI extends API
         if ($this->method == 'GET' && isset($_GET['email']) && isset($_GET['password'])) {
             $mysqli = $this->initDB();
             
-            $email = $_GET['email'];
-            $password = $_GET['password'];
+            $email = $mysqli->escape_string($_GET['email']);
+            $password = $mysqli->escape_string($_GET['password']);
 
-            $sql = "SELECT userID FROM User WHERE email = ".$userID." AND password = ".$password;
+            $sql = "SELECT userID FROM User WHERE email = '".$email."' AND password = '".$password."'";
             $res = mysqli_query($mysqli, $sql);
             $resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
-            
             return $resultArray;
+            
+            
         } else {
             return "Error: Invalid request";
         }

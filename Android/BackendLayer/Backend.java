@@ -78,5 +78,6 @@ public class Backend
         Backend backend = new Backend();
         
         System.out.println("ID: " + backend.getUserData(1).lastName);
+        System.out.println("ID: " + backend.getUserID("michael_truell@horacemann.org", "password"));
     }
 }
