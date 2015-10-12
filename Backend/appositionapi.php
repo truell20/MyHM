@@ -3,8 +3,6 @@
 require_once 'API.class.php';
 class MyAPI extends API
 {
-    protected $User;
-
     public function __construct($request, $origin) {
         parent::__construct($request);
     }
@@ -27,13 +25,15 @@ class MyAPI extends API
             
             $userID = $_GET['userID'];
 
-            $sql = "SELECT * FROM User WHERE userID = ".$userID;
+            $sql = "SELECT * FROM User WHERE userID = $userID";
             $res = mysqli_query($mysqli, $sql);
             $resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
-            
+
             return $resultArray;
         } else if($this->method == 'PUT'){
             parse_str($this->file, $putVars);
+            
+            // If there is no userID
             if(!isset($putVars['userID'])) {
                 return "Error: Invalid request";
             }
@@ -51,20 +51,22 @@ class MyAPI extends API
                 }
             }
 
-            $query = "UPDATE User SET ";
+            // Store the currentTime in the lastTimeLocationUpdated column
+            $availableColumns['lastTimeLocationUpdated'] = date('Y-m-d H:i:s');
 
+            // Building the query based on the items the caller has given us
+            $query = "UPDATE User SET ";
             $numItems = count($availableColumns);
             $i = 0;
             foreach($availableColumns as $columnName) {
-                if(++$i == $numItems) $query .= $columnName."='".$putVars[$columnName]."'";
-                else $query .= $columnName."='".$putVars[$columnName]."', ";
+                if(++$i == $numItems) $query .= "$columnName = '$putVars[$columnName]'";
+                else $query .= "$columnName = '$putVars[$columnName]', ";
             }
-
-            $query .= " WHERE userID = ".$userID;
+            $query .= " WHERE userID = $userID";
 
             mysqli_query($mysqli, $query);
 
-                return "Success";
+            return "Success";
         } else {
             return "Error: Invalid request";
         }
@@ -77,7 +79,7 @@ class MyAPI extends API
             $email = $mysqli->escape_string($_GET['email']);
             $password = $mysqli->escape_string($_GET['password']);
 
-            $sql = "SELECT userID FROM User WHERE email = '".$email."' AND password = '".$password."'";
+            $sql = "SELECT userID FROM User WHERE email = '$email' AND password = '$password.'";
             $res = mysqli_query($mysqli, $sql);
             $resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
             return $resultArray;
@@ -95,7 +97,7 @@ class MyAPI extends API
             $userID = $_GET['userID'];
             $day = $_GET['day'];
 
-            $sql = "SELECT period, name FROM Period WHERE userID = ".$userID." AND day = ".$day;
+            $sql = "SELECT period, name FROM Period WHERE userID = $userID AND day = $day";
             $res = mysqli_query($mysqli, $sql);
             $resultArray = array();
             while($holder = mysqli_fetch_array($res, MYSQLI_ASSOC)) {

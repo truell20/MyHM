@@ -34,7 +34,7 @@ public class BackendFileUpload {
                 boolean done = ftpClient.storeFile(remoteFile, inputStream);
                 inputStream.close();
                 if (done) {
-                    System.out.println("File " + a + "is uploaded successfully.");
+                    System.out.println("File " + a + " is uploaded successfully.");
                 }
             }
 
