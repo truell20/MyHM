@@ -12,6 +12,26 @@ enum HTTPMethod {
 public class Backend
 {
     public static final String domain = "http://www.truellprojects.com/ApPosition/";
+    
+    public static void main(String[] args) {
+        System.out.println("\u000c");
+
+        Backend backend = new Backend();
+
+        System.out.println("ID: " + backend.getUserData(1).lastName);
+        System.out.println("ID: " + backend.getUserID("michael_truell@horacemann.org", "password"));
+        System.out.println("ID: " + backend.getDay(0, 1).toString());
+
+        UserData data = new UserData();
+        data.userID = 1;
+        data.firstName = "Michael";
+        data.lastName = "Truell";
+        data.email = "michael_truell@horacemann.org";
+        data.password = "password";
+        data.currentLocation = "Tillinghast";
+        backend.setUserData(data);
+
+    }
 
     // Gets the UserData of the user who has the userID given
     // If the user doesn't exist, a null object is returned
@@ -86,26 +106,6 @@ public class Backend
         }
 
         return day;
-    }
-
-    public static void main(String[] args) {
-        System.out.println("\u000c");
-
-        Backend backend = new Backend();
-
-        System.out.println("ID: " + backend.getUserData(1).lastName);
-        System.out.println("ID: " + backend.getUserID("michael_truell@horacemann.org", "password"));
-        System.out.println("ID: " + backend.getDay(0, 1).toString());
-
-        UserData data = new UserData();
-        data.userID = 1;
-        data.firstName = "Michael";
-        data.lastName = "Truell";
-        data.email = "michael_truell@horacemann.org";
-        data.password = "password";
-        data.currentLocation = "Tillinghast";
-        backend.setUserData(data);
-
     }
 
     static String urlEncodeUTF8(String s) {

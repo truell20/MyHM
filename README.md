@@ -6,10 +6,10 @@
     - Asks where are you at the moment and gives you a list of choices
     - Once you've inputted a location, it shows you that location and gives you the option to change it
   - Build Personal Schedule Tab (without meetings; just static schedule)
-- Backend
+- ~~Backend~~
   - ~~Fully implement the getting of a schedule without meetings~~
   - ~~Be able to store currentLocation~~
-  - Location on the Home Tab expires once you go to a class
+  - ~~Location on the Home Tab expires once you go to a class~~
 
 ## Future Todo List
 
