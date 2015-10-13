@@ -14,9 +14,15 @@
 ## Future Todo List
 
 - Android
-  - Implement meetings
+  - Build the Personal Schedule Tab
+    - Implement the showing of static periods
+    - Implement the creation and showing of meetings
   - Build Search Tab
+    - Implement the search bar (asynchronous showing of suggestions as you type)
+    - Build the showing of friends schedules (meetings and static periods)
+    - Show friend's current location
   - Implement favorites feature
 - Backend
   - Implement meetings
+  - Implement searching for friends
   - Implement favorites list
