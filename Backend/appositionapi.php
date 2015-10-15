@@ -44,15 +44,29 @@ class MyAPI extends API
 
 	// Endpoint associated with a users credentials (everything in the User table; i.e. name, email, firstname, etc.)
 	protected function credentials() {
-		if ($this->method == 'GET' && isset($_GET['userID'])) {
-			$mysqli = $this->initDB();
-			$userID = $_GET['userID'];
+		if ($this->method == 'GET') {
+			$resultArray = NULL;
 
-			$sql = "SELECT * FROM User WHERE userID = $userID";
-			$res = mysqli_query($mysqli, $sql);
-			$resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
+			if(isset($_GET['userID'])) {
+				$mysqli = $this->initDB();
+				$userID = $_GET['userID'];
 
-			// Remove the currentLocation field if th
+				$sql = "SELECT * FROM User WHERE userID = $userID";
+				$res = mysqli_query($mysqli, $sql);
+				$resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
+			} else if(isset($_GET['email']) && isset($_GET['password'])) {
+				$mysqli = $this->initDB();
+				$email = $mysqli->escape_string($_GET['email']);
+				$password = $mysqli->escape_string($_GET['password']);
+
+				$sql = "SELECT * FROM User WHERE email = '$email' AND password = '$password'";
+				$res = mysqli_query($mysqli, $sql);
+				$resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
+			} else {
+				return "Error: Invalid request";
+			}
+
+			// Remove the currentLocation field if it was updated during a different period
 			$currentDateTime = new DateTime();
 			$lastTimeLocationUpdated = date_create_from_format("Y-m-d H:i:s", $resultArray['lastTimeLocationUpdated']);
 
@@ -100,23 +114,6 @@ class MyAPI extends API
 		}
 	}
 
-	// Endpoint associated with the getting of a userID if given the correct email and password
-	protected function userID() {
-		if ($this->method == 'GET' && isset($_GET['email']) && isset($_GET['password'])) {
-			$mysqli = $this->initDB();
-			$email = $mysqli->escape_string($_GET['email']);
-			$password = $mysqli->escape_string($_GET['password']);
-
-			$sql = "SELECT userID FROM User WHERE email = '$email' AND password = '$password'";
-			$res = mysqli_query($mysqli, $sql);
-			$resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
-			return $resultArray;
-			
-			
-		} else {
-			return "Error: Invalid request";
-		}
-	}
 
 	// Endpoint associated with a User's classes
 	protected function classes() {

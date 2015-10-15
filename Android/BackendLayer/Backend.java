@@ -21,7 +21,7 @@ public class Backend
         Backend backend = new Backend();
 
         System.out.println("ID: " + backend.getUserData(1).lastName);
-        System.out.println("ID: " + backend.getUserID("michael_truell@horacemann.org", "password"));
+        System.out.println("ID: " + backend.getUserDataWithSignIn("michael_truell@horacemann.org", "password"));
         System.out.println("ID: " + backend.getDay(0, 1).toString());
 
         UserData data = new UserData();
@@ -74,21 +74,33 @@ public class Backend
         System.out.println("contents " + queryURL(domain+"credentials", HTTPMethod.PUT, arguments));
     }
 
-    /* Returns the userID the user whose email and password match the ones given.
+    /* Returns the UserData the user whose email and password match the ones given.
      * If there is no user with that combination of password and username,
      * -1 is returned.
      * This method may be used for signing a user in.
      */
-    public static int getUserID(String email, String password) {
+    public static UserData getUserDataWithSignIn(String email, String password) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("email", email);
                     put("password", password);
                 }};
-        String webContents = queryURL(domain+"userID", HTTPMethod.GET, arguments);
+       
+        String webContents = queryURL(domain+"credentials", HTTPMethod.GET, arguments);
         JSONObject obj = new JSONObject(webContents);
-        int userID = obj.getInt("userID");
 
-        return userID;
+        if(obj.getString("email") == "") {
+            System.out.println("That user doesn't exist!");
+            return null;
+        }
+
+        UserData data = new UserData();
+        data.email = email;
+        data.firstName = obj.getString("firstname");
+        data.lastName = obj.getString("lastname");
+        data.password = password;
+        data.userID = obj.getInt("userID");
+
+        return data;
     }
 
     // Gets a day in a user's schedule using their userID and the number of the day (ranging from 0 - Day.numberOfPeriods)
