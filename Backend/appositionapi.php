@@ -3,12 +3,14 @@
 require_once 'API.class.php';
 class MyAPI extends API
 {
+	// Holds the end times of each period in string form
 	public $periodEndings = array("09:15:00", "13:15:00");
 
 	public function __construct($request, $origin) {
 		parent::__construct($request);
 	}
 
+	// Initializes and returns a mysqli object that represents our mysql database
 	private function initDB() {
 		$mysqli = new mysqli("ApPosition.db.12061709.hostedresource.com", "ApPosition", "Fustercluck2!", "ApPosition");
 		if (mysqli_connect_errno()) { 
@@ -18,6 +20,7 @@ class MyAPI extends API
 		return $mysqli;
 	}
 
+	// Determines if a User's current location has expired. Is true if the current location was updated during a different period
 	private function isCurrentLocationExpired($currentDateTime, $lastTimeLocationUpdated) {
 		if($currentDateTime->getTimestamp() - $lastTimeLocationUpdated->getTimestamp() >= 60*45) return True;
 		if($currentDateTime->diff($lastTimeLocationUpdated)->days > 0) return True;
@@ -37,8 +40,10 @@ class MyAPI extends API
 		return $isExpired;
 	}
 
-	// ENDPOINTS
-	 protected function credentials() {
+	// API ENDPOINTS
+
+	// Endpoint associated with a users credentials (everything in the User table; i.e. name, email, firstname, etc.)
+	protected function credentials() {
 		if ($this->method == 'GET' && isset($_GET['userID'])) {
 			$mysqli = $this->initDB();
 			$userID = $_GET['userID'];
@@ -93,9 +98,10 @@ class MyAPI extends API
 		} else {
 			return "Error: Invalid request";
 		}
-	 }
+	}
 
-	 protected function userID() {
+	// Endpoint associated with the getting of a userID if given the correct email and password
+	protected function userID() {
 		if ($this->method == 'GET' && isset($_GET['email']) && isset($_GET['password'])) {
 			$mysqli = $this->initDB();
 			$email = $mysqli->escape_string($_GET['email']);
@@ -110,9 +116,10 @@ class MyAPI extends API
 		} else {
 			return "Error: Invalid request";
 		}
-	 }
+	}
 
-	 protected function classes() {
+	// Endpoint associated with a User's classes
+	protected function classes() {
 		if ($this->method == 'GET' && isset($_GET['userID']) && isset($_GET['day'])) {
 			$mysqli = $this->initDB();
 			$userID = $_GET['userID'];
@@ -128,7 +135,7 @@ class MyAPI extends API
 		} else {
 			return "Error: Invalid request";
 		}
-	 }
+	}
  }
 
  ?>

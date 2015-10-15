@@ -9,11 +9,13 @@ enum HTTPMethod {
     GET, POST, PUT;
 }
 
+// The class containing the functions to comunicate with our RESTful backend
 public class Backend
 {
     public static final String domain = "http://www.truellprojects.com/ApPosition/";
     
-    public static void main(String[] args) {
+    // IGNORE THIS: This is my main function for testing the backend
+    public static void mainTest(String[] args) {
         System.out.println("\u000c");
 
         Backend backend = new Backend();

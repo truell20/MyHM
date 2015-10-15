@@ -1,3 +1,6 @@
+/* A period in a schedule.
+ * Each period has a name.
+ */
 public class Period {
     public String name;
     

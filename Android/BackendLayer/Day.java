@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/* Represents a day in a schedule
+ * Each period in the day is an object of the Period class
+ */
 public class Day {
     private final int numberOfPeriods = 8;
     
