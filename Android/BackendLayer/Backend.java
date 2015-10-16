@@ -31,7 +31,7 @@ public class Backend
         data.email = "michael_truell@horacemann.org";
         data.password = "password";
         data.currentLocation = "Tillinghast";
-        backend.setUserData(data);
+        backend.setUserData(data, "password");
 
     }
 
@@ -61,7 +61,7 @@ public class Backend
     }
 
     // Sets the UserData of the user who has the userID given
-    public static void setUserData(UserData userData) {
+    public static void setUserData(UserData userData, String password) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("userID", userData.userID);
                     put("firstname", userData.firstName);
@@ -69,6 +69,8 @@ public class Backend
                     put("email", userData.email);
                     put("password", userData.password);
                     put("currentLocation", userData.currentLocation);
+                    
+                    put("key", userData.password);
                 }};
 
         System.out.println("contents " + queryURL(domain+"credentials", HTTPMethod.PUT, arguments));
