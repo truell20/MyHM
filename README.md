@@ -11,7 +11,7 @@
   - Ben keep learning about Android
 - Backend
   - Implement meetings
-  - Implement searching for friends
+  - ~~Implement searching for friends~~
 
 ## Future Todo List
 
