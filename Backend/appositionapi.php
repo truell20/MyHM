@@ -53,6 +53,17 @@ class MyAPI extends API
 		else return False;
 	}
 
+	private function removeLocationIfExpired(&$resultArray) {
+
+		$lastTimeLocationUpdated = date_create_from_format("Y-m-d H:i:s", $resultArray['lastTimeLocationUpdated']);
+		$currentDateTime = new DateTime();
+
+		if($this->isCurrentLocationExpired($currentDateTime, $lastTimeLocationUpdated) == True) {
+			mysqli_query($this->mysqli,"UPDATE User SET currentLocation = '' WHERE userID = $userID");
+			unset($resultArray['currentLocation']);
+		}
+	}
+
 	// API ENDPOINTS
 
 	// Endpoint associated with a users credentials (everything in the User table; i.e. name, email, firstname, etc.)
@@ -66,6 +77,10 @@ class MyAPI extends API
 				$sql = "SELECT * FROM User WHERE userID = $userID";
 				$res = mysqli_query($this->mysqli, $sql);
 				$resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
+
+				$this->removeLocationIfExpired($resultArray);
+
+				return $resultArray;
 			} else if(isset($_GET['email']) && isset($_GET['password'])) {
 				$email = $this->mysqli->escape_string($_GET['email']);
 				$password = $this->mysqli->escape_string($_GET['password']);
@@ -73,20 +88,27 @@ class MyAPI extends API
 				$sql = "SELECT * FROM User WHERE email = '$email' AND password = '$password'";
 				$res = mysqli_query($this->mysqli, $sql);
 				$resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
+
+				$this->removeLocationIfExpired($resultArray);
+
+				return $resultArray;
+			} else if(isset($_GET['searchTerm'])) {
+				$searchTerm = $_GET['searchTerm'];
+
+				$sql = "SELECT userID, firstname, lastname, email FROM User WHERE name LIKE '$searchTerm'";
+				$res = mysqli_query($this->mysqli, $sql);
+
+				$returnArray = array();
+
+				while($resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+					$this->removeLocationIfExpired($resultArray);
+					array_push($returnArray, $resultArray);
+				}
+
+				return $returnArray;
 			} else {
 				return "Error: Invalid request";
 			}
-
-			// Remove the currentLocation field if it was updated during a different period
-			$currentDateTime = new DateTime();
-			$lastTimeLocationUpdated = date_create_from_format("Y-m-d H:i:s", $resultArray['lastTimeLocationUpdated']);
-
-			if($this->isCurrentLocationExpired($currentDateTime, $lastTimeLocationUpdated) == True) {
-				mysqli_query($this->mysqli,"UPDATE User SET currentLocation = '' WHERE userID = $userID");
-				$resultArray['currentLocation'] = NULL;
-			}
-
-			return $resultArray;
 		} else if($this->method == 'PUT'){
 			// Sleep for one second to stop brute force attacks
 			sleep(1);

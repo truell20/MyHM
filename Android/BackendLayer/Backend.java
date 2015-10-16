@@ -4,6 +4,7 @@ import java.net.*;
 import org.json.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
 
 enum HTTPMethod {
     GET, POST, PUT;
@@ -58,6 +59,32 @@ public class Backend
         data.userID = userID;
 
         return data;
+    }
+    
+    // Finds Users with a name that contains the searchTerm specified
+    public static ArrayList<UserData> searchForUsers(String searchTerm) {
+        HashMap<String,Object> arguments = new HashMap<String,Object>() {{
+                    put("searchTerm", searchTerm);
+                }};
+
+        String webContents = queryURL(domain+"credentials", HTTPMethod.GET, arguments);
+        JSONArray arrayOfUsers = new JSONArray(webContents);
+
+        ArrayList<UserData> returnList = new ArrayList<UserData>();
+        
+        for(int a = 0; a < arrayOfUsers.length(); a++) {
+            JSONObject user = arrayOfUsers.getJSONObject(a);
+            
+            UserData data = new UserData();
+            data.email = user.getString("email");
+            data.firstName = user.getString("firstname");
+            data.lastName = user.getString("lastname");
+            data.userID = user.getInt("userID");
+            
+            returnList.add(data);
+        }
+
+        return returnList;
     }
 
     // Sets the UserData of the user who has the userID given
@@ -187,7 +214,9 @@ public class Backend
             String inputLine;
             while ((inputLine = in.readLine()) != null) response.append(inputLine);
             in.close();
-
+            
+            System.out.println("out: " + response.toString());
+            
             return response.toString();
         } catch (Exception e) {
             e.printStackTrace();
