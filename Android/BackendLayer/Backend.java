@@ -33,7 +33,8 @@ public class Backend
         data.password = "password";
         data.currentLocation = "Tillinghast";
         backend.setUserData(data, "password");
-
+        
+        System.out.println("ID: " + backend.getMeetings("2015-10-21", 1).get(0).name);
     }
 
     // Gets the UserData of the user who has the userID given
@@ -149,6 +150,30 @@ public class Backend
         }
 
         return day;
+    }
+    
+    public static ArrayList<Meeting> getMeetings(String date, int userID) {
+        HashMap<String,Object> arguments = new HashMap<String,Object>() {{
+                    put("date", date);
+                    put("userID", userID);
+                }};
+        String webContents = queryURL(domain+"meetings", HTTPMethod.GET, arguments);
+        JSONArray jsonMeetings = new JSONArray(webContents);
+        
+        ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+
+        for(int a = 0; a < jsonMeetings.length(); a++) {
+            JSONObject jsonMeeting = jsonMeetings.getJSONObject(a);
+            Meeting meeting = new Meeting();
+            meeting.name = jsonMeeting.getString("name");
+            JSONArray memberIDs = jsonMeeting.getJSONArray("members");
+            for(int b = 0; b < memberIDs.length(); b++) {
+                meeting.memberIDs.add(memberIDs.getInt(b));
+            }
+            meetings.add(meeting);
+        }
+
+        return meetings;
     }
 
     static String urlEncodeUTF8(String s) {

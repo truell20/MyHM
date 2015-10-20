@@ -177,6 +177,44 @@ class MyAPI extends API
 			return "Error: Invalid request";
 		}
 	}
+
+	// Endpoint associated with a User's meetings
+	protected function meetings() {
+		if ($this->method == 'GET' && isset($_GET['userID']) && isset($_GET['date'])) {
+			$userID = $_GET['userID'];
+			$date = $_GET['date'];
+
+			$sql = "SELECT meetingID FROM MeetingToUser WHERE userID = $userID";
+			$meetingIDResult = mysqli_query($this->mysqli, $sql);
+
+			$returnArray = array();
+
+			while($holder = mysqli_fetch_array($meetingIDResult, MYSQLI_ASSOC)) {
+				$meetingID = $holder['meetingID'];
+				$sql = "SELECT * FROM Meeting WHERE meetingID = $meetingID";
+				$meetingResult = mysqli_query($this->mysqli, $sql);
+				$resultArray = mysqli_fetch_array($meetingResult, MYSQLI_ASSOC);
+
+				$beginningDateTime = date_create_from_format("Y-m-d H:i:s", $resultArray['beginning']);
+
+				// If dates are equal
+				if(strcmp($date, $beginningDateTime->format("Y-m-d")) == 0) {
+					$sql = "SELECT * FROM MeetingToUser WHERE meetingID = $meetingID";
+					$userIDRes = mysqli_query($this->mysqli, $sql);
+					$userIDs = array();
+					while($userIDArray = mysqli_fetch_array($userIDRes, MYSQLI_ASSOC)) {
+						array_push($userIDs, $userIDArray['userID']);
+					}
+					$resultArray['members'] = $userIDs;
+					array_push($returnArray, $resultArray);
+				}
+			}  
+
+			return $returnArray;
+		} else {
+			return "Error: Invalid request";
+		}
+	}
  }
 
  ?>

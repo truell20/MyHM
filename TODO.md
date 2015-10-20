@@ -7,8 +7,8 @@
   - Build Personal Schedule Tab (without meetings; just static schedule)
     - Implement the showing of static periods
   - Ben keep learning about Android
-- Backend
-  - Implement meetings
+- ~~Backend~~
+  - ~~Implement meetings~~
   - ~~Implement searching for friends~~
 
 ## Future Todo List
