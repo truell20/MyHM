@@ -164,12 +164,16 @@ public class Backend
 
         for(int a = 0; a < jsonMeetings.length(); a++) {
             JSONObject jsonMeeting = jsonMeetings.getJSONObject(a);
+            
             Meeting meeting = new Meeting();
             meeting.name = jsonMeeting.getString("name");
+            meeting.beginningDateTime = jsonMeeting.getString("beginning");
+            meeting.endDateTime = jsonMeeting.getString("ending");
             JSONArray memberIDs = jsonMeeting.getJSONArray("members");
             for(int b = 0; b < memberIDs.length(); b++) {
                 meeting.memberIDs.add(memberIDs.getInt(b));
             }
+            
             meetings.add(meeting);
         }
 

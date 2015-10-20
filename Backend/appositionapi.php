@@ -68,6 +68,24 @@ class MyAPI extends API
 		}
 	}
 
+	/// Returns an associated array with a meetings credentials
+	private function getMeetingWithID($meetingID) {
+		$sql = "SELECT * FROM Meeting WHERE meetingID = $meetingID";
+		$meetingResult = mysqli_query($this->mysqli, $sql);
+		$resultArray = mysqli_fetch_array($meetingResult, MYSQLI_ASSOC);
+
+		/// Get members of meeting
+		$sql = "SELECT * FROM MeetingToUser WHERE meetingID = $meetingID";
+		$userIDRes = mysqli_query($this->mysqli, $sql);
+		$userIDs = array();
+		while($userIDArray = mysqli_fetch_array($userIDRes, MYSQLI_ASSOC)) {
+			array_push($userIDs, $userIDArray['userID']);
+		}
+		$resultArray['members'] = $userIDs;
+
+		return $resultArray;
+	}
+
 	// API ENDPOINTS
 
 	// Endpoint associated with a users credentials (everything in the User table; i.e. name, email, firstname, etc.)
@@ -180,6 +198,7 @@ class MyAPI extends API
 
 	// Endpoint associated with a User's meetings
 	protected function meetings() {
+		// Get meetings with date and userID
 		if ($this->method == 'GET' && isset($_GET['userID']) && isset($_GET['date'])) {
 			$userID = $_GET['userID'];
 			$date = $_GET['date'];
@@ -191,26 +210,20 @@ class MyAPI extends API
 
 			while($holder = mysqli_fetch_array($meetingIDResult, MYSQLI_ASSOC)) {
 				$meetingID = $holder['meetingID'];
-				$sql = "SELECT * FROM Meeting WHERE meetingID = $meetingID";
-				$meetingResult = mysqli_query($this->mysqli, $sql);
-				$resultArray = mysqli_fetch_array($meetingResult, MYSQLI_ASSOC);
+				$meeting = $this->getMeetingWithID($meetingID);
 
+				/// Include the meeting if it is on the specified date
 				$beginningDateTime = date_create_from_format("Y-m-d H:i:s", $resultArray['beginning']);
-
-				// If dates are equal
 				if(strcmp($date, $beginningDateTime->format("Y-m-d")) == 0) {
-					$sql = "SELECT * FROM MeetingToUser WHERE meetingID = $meetingID";
-					$userIDRes = mysqli_query($this->mysqli, $sql);
-					$userIDs = array();
-					while($userIDArray = mysqli_fetch_array($userIDRes, MYSQLI_ASSOC)) {
-						array_push($userIDs, $userIDArray['userID']);
-					}
-					$resultArray['members'] = $userIDs;
 					array_push($returnArray, $resultArray);
 				}
 			}  
 
 			return $returnArray;
+		} else if($this->method == 'GET' && isset($_GET['meetingID'])) {
+			$meetingID = $_GET['meetingID'];
+
+			return $this->getMeetingWithID($meetingID);
 		} else {
 			return "Error: Invalid request";
 		}

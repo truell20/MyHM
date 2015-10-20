@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Meeting {
-    String name;
+    String name, beginningDateTime, endDateTime;
     ArrayList<Integer> memberIDs;
     
     public Meeting() {
