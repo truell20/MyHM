@@ -28,21 +28,29 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="79dp" />
 
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/locationInput"
-            android:text="Location, Ex. Caf"
-            android:layout_centerVertical="true"
-            android:layout_centerHorizontal="true" />
-
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Submit"
             android:id="@+id/submit"
-            android:layout_below="@+id/locationInput"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="45dp" />
+            android:layout_marginBottom="120dp"
+            android:layout_above="@+id/schedule"
+            android:layout_alignRight="@+id/schedule"
+            android:layout_alignEnd="@+id/schedule" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Schedule"
+            android:id="@+id/schedule"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/options"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 </LinearLayout>

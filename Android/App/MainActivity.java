@@ -23,7 +23,20 @@ public class MainActivity extends AppCompatActivity {
         Button signIn = (Button) findViewById(R.id.signInButton);
         signIn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(this, home.class));
+                String email, password;
+
+                EditText emailInput = (EditText) findViewById(R.id.emailInput);
+                email = emailInput.getText().toString();
+                System.out.println(email);
+
+                EditText passwordInput = (EditText) findViewById(R.id.passwordInput);
+                password = passwordInput.getText().toString();
+
+                Intent i = new Intent(getApplicationContext(), home.class);
+                startActivity(i);
+
+                i.putExtra("email", email);
+                i.putExtra("password", password);
             }
         });
      }

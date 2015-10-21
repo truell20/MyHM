@@ -1,5 +1,6 @@
 package com.example.lucakoval.apposition;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,8 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 public class home extends AppCompatActivity {
@@ -19,14 +22,38 @@ public class home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
+        //Intent i = getIntent();
+        String email = getIntent().getStringExtra("email");
+        System.out.println(email);
+        //String password = i.getStringExtra("password");
+
+        TextView home = (TextView) findViewById(R.id.homeText);
+        home.setText(email);
+
+        String[] textOptions={"Caf", "Library", "Class"};
+        ArrayAdapter<String> stringArrayAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, textOptions);
+        Spinner spinner = (Spinner) findViewById(R.id.options);
+        spinner.setAdapter(stringArrayAdapter);
+
+        final Spinner options = (Spinner) findViewById(R.id.options);
+        final String choice = options.getSelectedItem().toString();
+
         Button submit = (Button) findViewById(R.id.submit);
 
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                EditText locationInput = (EditText) findViewById(R.id.locationInput);
                 TextView locationText = (TextView) findViewById(R.id.locationText);
 
-                locationText.setText(locationInput.getText());
+                locationText.setText(choice);
+            }
+        });
+
+        Button schedule = (Button) findViewById(R.id.schedule);
+
+        schedule.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent j = new Intent(getApplicationContext(), schedule.class);
+                startActivity(j);
             }
         });
     }
