@@ -1,4 +1,4 @@
-## Due next Tuesday
+## Due next Tuesday, 11-17-15 (ACTUALLY)
 
 - Android
   - Integrate Backend with Home Tab
