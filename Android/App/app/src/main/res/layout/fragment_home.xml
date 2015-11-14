@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.lucakoval.apposition.HomeFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -34,17 +34,8 @@
             android:text="Submit"
             android:id="@+id/submit"
             android:layout_marginBottom="120dp"
-            android:layout_above="@+id/schedule"
-            android:layout_alignRight="@+id/schedule"
-            android:layout_alignEnd="@+id/schedule" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Schedule"
-            android:id="@+id/schedule"
             android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"/>
 
         <Spinner
             android:layout_width="wrap_content"
@@ -53,4 +44,5 @@
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
-</LinearLayout>
+
+</FrameLayout>

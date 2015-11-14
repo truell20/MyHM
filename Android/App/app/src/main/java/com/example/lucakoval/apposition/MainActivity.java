@@ -11,11 +11,18 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences settings = getSharedPreferences(getString(R.string.preferencesFileKey), Context.MODE_PRIVATE);
+        if(settings.getString(getString(R.string.emailKey), null) != null) {
+            Intent i = new Intent(getApplicationContext(), TabActivity.class);
+            startActivity(i);
+        }
+
         setContentView(R.layout.content_main);
 
         Button signInButton = (Button) findViewById(R.id.signInButton);
@@ -36,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString(getString(R.string.passwordKey), password);
                 editor.commit();
 
-                // Go to the Home Activity
-                Intent i = new Intent(getApplicationContext(), Home.class);
+                // Go to the TabActivity
+                Intent i = new Intent(getApplicationContext(), TabActivity.class);
                 startActivity(i);
 
                 // Kill the Sign In activity
@@ -48,19 +55,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
