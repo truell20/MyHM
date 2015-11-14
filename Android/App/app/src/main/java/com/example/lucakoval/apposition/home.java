@@ -30,7 +30,7 @@ public class Home extends AppCompatActivity {
                 R.array.locationsArray, android.R.layout.simple_spinner_item);
         Spinner spinner = (Spinner) findViewById(R.id.options);
         spinner.setAdapter(adapter);
-        
+
         Button submit = (Button) findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

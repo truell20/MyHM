@@ -29,14 +29,19 @@ public class MainActivity extends AppCompatActivity {
                 EditText passwordInput = (EditText) findViewById(R.id.passwordInput);
                 String password = passwordInput.getText().toString();
 
+                // Store the email and password on the phone
                 SharedPreferences settings = getSharedPreferences(getString(R.string.preferencesFileKey), Context.MODE_PRIVATE);
                 SharedPreferences.Editor editor = settings.edit();
                 editor.putString(getString(R.string.emailKey), email);
                 editor.putString(getString(R.string.passwordKey), password);
                 editor.commit();
 
+                // Go to the Home Activity
                 Intent i = new Intent(getApplicationContext(), Home.class);
                 startActivity(i);
+
+                // Kill the Sign In activity
+                finish();
             }
         });
      }
