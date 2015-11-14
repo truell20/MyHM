@@ -1,6 +1,8 @@
 package com.example.lucakoval.apposition;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,34 +20,28 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
-        //Intent i = getIntent();
-        String email = getIntent().getStringExtra("email");
-        System.out.println(email);
-        //String password = i.getStringExtra("password");
+        SharedPreferences settings = getSharedPreferences(getString(R.string.preferencesFileKey), Context.MODE_PRIVATE);
+        String email = settings.getString(getString(R.string.emailKey), "email");
 
         TextView home = (TextView) findViewById(R.id.homeText);
         home.setText(email);
 
-        String[] textOptions={"Caf", "Library", "Class"};
-        ArrayAdapter<String> stringArrayAdapter= new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, textOptions);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.locationsArray, android.R.layout.simple_spinner_item);
         Spinner spinner = (Spinner) findViewById(R.id.options);
-        spinner.setAdapter(stringArrayAdapter);
-
-        final Spinner options = (Spinner) findViewById(R.id.options);
-        final String choice = options.getSelectedItem().toString();
-
+        spinner.setAdapter(adapter);
+        
         Button submit = (Button) findViewById(R.id.submit);
-
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 TextView locationText = (TextView) findViewById(R.id.locationText);
+                Spinner spinner = (Spinner) findViewById(R.id.options);
 
-                locationText.setText(choice);
+                locationText.setText(spinner.getSelectedItem().toString());
             }
         });
 
         Button schedule = (Button) findViewById(R.id.schedule);
-
         schedule.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent j = new Intent(getApplicationContext(), Schedule.class);

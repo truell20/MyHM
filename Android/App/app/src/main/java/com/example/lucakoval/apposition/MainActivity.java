@@ -1,6 +1,8 @@
 package com.example.lucakoval.apposition;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,21 +18,24 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_main);
 
-        Button signIn = (Button) findViewById(R.id.signInButton);
-        signIn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                String email, password;
+        Button signInButton = (Button) findViewById(R.id.signInButton);
 
+        // When button is clicked, save email and password and launch home tab
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
                 EditText emailInput = (EditText) findViewById(R.id.emailInput);
-                email = emailInput.getText().toString();
-                System.out.println(email);
+                String email = emailInput.getText().toString();
 
                 EditText passwordInput = (EditText) findViewById(R.id.passwordInput);
-                password = passwordInput.getText().toString();
+                String password = passwordInput.getText().toString();
+
+                SharedPreferences settings = getSharedPreferences(getString(R.string.preferencesFileKey), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = settings.edit();
+                editor.putString(getString(R.string.emailKey), email);
+                editor.putString(getString(R.string.passwordKey), password);
+                editor.commit();
 
                 Intent i = new Intent(getApplicationContext(), Home.class);
-                i.putExtra("email", email);
-                i.putExtra("password", password);
                 startActivity(i);
             }
         });
