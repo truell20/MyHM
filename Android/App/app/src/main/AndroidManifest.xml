@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home"
+            android:name=".Home"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".schedule"
+            android:name=".Schedule"
             android:label="@string/title_activity_schedule"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>

@@ -2,20 +2,16 @@ package com.example.lucakoval.apposition;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class home extends AppCompatActivity {
+public class Home extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +48,7 @@ public class home extends AppCompatActivity {
 
         schedule.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent j = new Intent(getApplicationContext(), schedule.class);
+                Intent j = new Intent(getApplicationContext(), Schedule.class);
                 startActivity(j);
             }
         });
