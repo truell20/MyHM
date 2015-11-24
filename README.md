@@ -13,6 +13,7 @@ Users see their school schedule, can setup meetings with teachers and peers, can
     - Sliding back and forth
     - Integreate the backend
     - Show meetings
+  - Finsh the Search Tab
 
 ### Future Todo List
 
