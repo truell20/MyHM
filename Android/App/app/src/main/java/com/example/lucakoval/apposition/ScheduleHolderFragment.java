@@ -46,18 +46,17 @@ public class ScheduleHolderFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return ScheduleFragment.newInstance();
+            return ScheduleFragment.newInstance(position+1);
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 10;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position == 0) return "Schedule 1";
-            else return "Schedule 2";
+            return "Day " + position;
         }
     }
 }

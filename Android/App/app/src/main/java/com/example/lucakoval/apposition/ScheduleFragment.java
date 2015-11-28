@@ -15,10 +15,15 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 
 public class ScheduleFragment extends Fragment {
-    public static ScheduleFragment newInstance() {
+    int dayNumber = -1;
+
+    public static ScheduleFragment newInstance(int dayNumber) {
         ScheduleFragment fragment = new ScheduleFragment();
+        fragment.dayNumber = dayNumber;
         return fragment;
     }
 
@@ -34,6 +39,8 @@ public class ScheduleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View result = inflater.inflate(R.layout.fragment_schedule, container, false);
+
+        ((TextView)result.findViewById(R.id.dayLabel)).setText("Day " + dayNumber);
 
         // Populate LinearLayout with Periods
         LinearLayout layout = (LinearLayout)result.findViewById(R.id.linearLayout);

@@ -10,8 +10,7 @@
     tools:context="com.example.lucakoval.apposition.ScheduleFragment">
 
 
-    <TextView android:id="@+id/section_label" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
 
     <LinearLayout
         android:orientation="vertical"
@@ -22,6 +21,14 @@
         android:layout_alignParentEnd="true"
         android:weightSum="1"
         android:id="@+id/linearLayout">
+
+        <TextView
+            android:id="@+id/dayLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textSize="24sp"
+            android:text="Day 1"/>
 
 
     </LinearLayout>
