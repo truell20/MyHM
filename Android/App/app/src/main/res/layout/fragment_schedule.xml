@@ -20,71 +20,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:weightSum="1">
+        android:weightSum="1"
+        android:id="@+id/linearLayout">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A Period"
-            android:id="@+id/aPeriod"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.12" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="B period"
-            android:id="@+id/bPeriod"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.12" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="C Period"
-            android:id="@+id/cPeriod"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.12" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="D period"
-            android:id="@+id/dPeriod"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.12" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="E Period"
-            android:id="@+id/ePeriod"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.12" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="F Period"
-            android:id="@+id/fPeriod"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.12" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="G Period"
-            android:id="@+id/gPeriod"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.12" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="H Period"
-            android:id="@+id/hPeriod"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.12" />
     </LinearLayout>
 
 </RelativeLayout>
