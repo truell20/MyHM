@@ -21,9 +21,10 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+
 public class TabActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    private ViewPager mViewPager;
+    private NonSwipeableViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class TabActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tab);
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (NonSwipeableViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
@@ -64,7 +65,7 @@ public class TabActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if(position == 0) return HomeFragment.newInstance("michael");
-            else return ScheduleFragment.newInstance();
+            else return ScheduleHolderFragment.newInstance();
         }
 
         @Override
