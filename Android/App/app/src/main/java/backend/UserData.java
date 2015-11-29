@@ -1,3 +1,5 @@
+package backend;
+
 /* Holds all of a User's meta-data
  */
 public class UserData {

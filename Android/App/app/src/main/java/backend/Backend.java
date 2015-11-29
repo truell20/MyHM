@@ -1,3 +1,5 @@
+package backend;
+
 import java.util.Scanner;
 import java.io.*;
 import java.net.*;
@@ -39,57 +41,65 @@ public class Backend
 
     // Gets the UserData of the user who has the userID given
     // If the user doesn't exist, a null object is returned
-    public static UserData getUserData(int userID) {
+    public static UserData getUserData(final int userID) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("userID", userID);
                 }};
 
-        String webContents = queryURL(domain+"credentials", HTTPMethod.GET, arguments);
-        JSONObject obj = new JSONObject(webContents);
+        try {
+            String webContents = queryURL(domain + "credentials", HTTPMethod.GET, arguments);
+            JSONObject obj = new JSONObject(webContents);
 
-        if(obj.getString("email") == "") {
-            System.out.println("That user doesn't exist!");
+            if (obj.getString("email") == "") {
+                System.out.println("That user doesn't exist!");
+                return null;
+            }
+
+            UserData data = new UserData();
+            data.email = obj.getString("email");
+            data.firstName = obj.getString("firstname");
+            data.lastName = obj.getString("lastname");
+            data.password = obj.getString("password");
+            data.userID = userID;
+
+            return data;
+        } catch (Exception e) {
+            System.out.println("There was a problem getting UserData");
             return null;
         }
-
-        UserData data = new UserData();
-        data.email = obj.getString("email");
-        data.firstName = obj.getString("firstname");
-        data.lastName = obj.getString("lastname");
-        data.password = obj.getString("password");
-        data.userID = userID;
-
-        return data;
     }
     
     // Finds Users with a name that contains the searchTerm specified
-    public static ArrayList<UserData> searchForUsers(String searchTerm) {
+    public static ArrayList<UserData> searchForUsers(final String searchTerm) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("searchTerm", searchTerm);
                 }};
+        try {
+            String webContents = queryURL(domain + "credentials", HTTPMethod.GET, arguments);
+            JSONArray arrayOfUsers = new JSONArray(webContents);
 
-        String webContents = queryURL(domain+"credentials", HTTPMethod.GET, arguments);
-        JSONArray arrayOfUsers = new JSONArray(webContents);
+            ArrayList<UserData> returnList = new ArrayList<UserData>();
 
-        ArrayList<UserData> returnList = new ArrayList<UserData>();
-        
-        for(int a = 0; a < arrayOfUsers.length(); a++) {
-            JSONObject user = arrayOfUsers.getJSONObject(a);
-            
-            UserData data = new UserData();
-            data.email = user.getString("email");
-            data.firstName = user.getString("firstname");
-            data.lastName = user.getString("lastname");
-            data.userID = user.getInt("userID");
-            
-            returnList.add(data);
+            for (int a = 0; a < arrayOfUsers.length(); a++) {
+                JSONObject user = arrayOfUsers.getJSONObject(a);
+
+                UserData data = new UserData();
+                data.email = user.getString("email");
+                data.firstName = user.getString("firstname");
+                data.lastName = user.getString("lastname");
+                data.userID = user.getInt("userID");
+
+                returnList.add(data);
+            }
+
+            return returnList;
+        } catch (Exception e) {
+            return null;
         }
-
-        return returnList;
     }
 
     // Sets the UserData of the user who has the userID given
-    public static void setUserData(UserData userData, String password) {
+    public static void setUserData(final UserData userData, final String password) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("userID", userData.userID);
                     put("firstname", userData.firstName);
@@ -109,75 +119,87 @@ public class Backend
      * -1 is returned.
      * This method may be used for signing a user in.
      */
-    public static UserData getUserDataWithSignIn(String email, String password) {
+    public static UserData getUserDataWithSignIn(final String email, final String password) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("email", email);
                     put("password", password);
                 }};
        
-        String webContents = queryURL(domain+"credentials", HTTPMethod.GET, arguments);
-        JSONObject obj = new JSONObject(webContents);
+        try {
+            String webContents = queryURL(domain + "credentials", HTTPMethod.GET, arguments);
+            JSONObject obj = new JSONObject(webContents);
 
-        if(obj.getString("email") == "") {
-            System.out.println("That user doesn't exist!");
+            if (obj.getString("email") == "") {
+                System.out.println("That user doesn't exist!");
+                return null;
+            }
+
+            UserData data = new UserData();
+            data.email = email;
+            data.firstName = obj.getString("firstname");
+            data.lastName = obj.getString("lastname");
+            data.password = password;
+            data.userID = obj.getInt("userID");
+
+            return data;
+        } catch (Exception e) {
             return null;
         }
-
-        UserData data = new UserData();
-        data.email = email;
-        data.firstName = obj.getString("firstname");
-        data.lastName = obj.getString("lastname");
-        data.password = password;
-        data.userID = obj.getInt("userID");
-
-        return data;
     }
 
     // Gets a day in a user's schedule using their userID and the number of the day (ranging from 0 - Day.numberOfPeriods)
     // If distanceFromToday = 0, then today is returned. If distanceFromToday = 1, tomorrow is returned, and so on
-    public static Day getDay(int dayIndex, int userID) {
+    public static Day getDay(final int dayIndex, final int userID) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("day", dayIndex);
                     put("userID", userID);
                 }};
-        String webContents = queryURL(domain+"classes", HTTPMethod.GET, arguments);
-        JSONArray periods = new JSONArray(webContents);
-        Day day = new Day();
+        try {
+            String webContents = queryURL(domain + "classes", HTTPMethod.GET, arguments);
+            JSONArray periods = new JSONArray(webContents);
+            Day day = new Day();
 
-        for(int a = 0; a < periods.length(); a++) {
-            JSONObject period = periods.getJSONObject(a);
-            day.setPeriod(period.getInt("period"), new Period(period.getString("name")));
+            for (int a = 0; a < periods.length(); a++) {
+                JSONObject period = periods.getJSONObject(a);
+                day.setPeriod(period.getInt("period"), new Period(period.getString("name")));
+            }
+
+            return day;
+        } catch (Exception e) {
+            return null;
         }
-
-        return day;
     }
     
-    public static ArrayList<Meeting> getMeetings(String date, int userID) {
+    public static ArrayList<Meeting> getMeetings(final String date, final int userID) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("date", date);
                     put("userID", userID);
                 }};
-        String webContents = queryURL(domain+"meetings", HTTPMethod.GET, arguments);
-        JSONArray jsonMeetings = new JSONArray(webContents);
-        
-        ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+        try {
+            String webContents = queryURL(domain + "meetings", HTTPMethod.GET, arguments);
+            JSONArray jsonMeetings = new JSONArray(webContents);
 
-        for(int a = 0; a < jsonMeetings.length(); a++) {
-            JSONObject jsonMeeting = jsonMeetings.getJSONObject(a);
-            
-            Meeting meeting = new Meeting();
-            meeting.name = jsonMeeting.getString("name");
-            meeting.beginningDateTime = jsonMeeting.getString("beginning");
-            meeting.endDateTime = jsonMeeting.getString("ending");
-            JSONArray memberIDs = jsonMeeting.getJSONArray("members");
-            for(int b = 0; b < memberIDs.length(); b++) {
-                meeting.memberIDs.add(memberIDs.getInt(b));
+            ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+
+            for (int a = 0; a < jsonMeetings.length(); a++) {
+                JSONObject jsonMeeting = jsonMeetings.getJSONObject(a);
+
+                Meeting meeting = new Meeting();
+                meeting.name = jsonMeeting.getString("name");
+                meeting.beginningDateTime = jsonMeeting.getString("beginning");
+                meeting.endDateTime = jsonMeeting.getString("ending");
+                JSONArray memberIDs = jsonMeeting.getJSONArray("members");
+                for (int b = 0; b < memberIDs.length(); b++) {
+                    meeting.memberIDs.add(memberIDs.getInt(b));
+                }
+
+                meetings.add(meeting);
             }
-            
-            meetings.add(meeting);
-        }
 
-        return meetings;
+            return meetings;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     static String urlEncodeUTF8(String s) {

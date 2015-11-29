@@ -1,3 +1,5 @@
+package backend;
+
 import java.util.ArrayList;
 
 /* Represents a day in a schedule

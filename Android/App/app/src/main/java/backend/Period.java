@@ -1,3 +1,5 @@
+package backend;
+
 /* A period in a schedule.
  * Each period has a name.
  */
