@@ -15,7 +15,7 @@ enum HTTPMethod {
 // The class containing the functions to comunicate with our RESTful backend
 public class Backend
 {
-    public static final String domain = "10.0.2.2:80/ApPosition/Backend/";
+    public static final String domain = "http://10.0.2.2:80/ApPosition/Backend/";
     
     // IGNORE THIS: This is my main function for testing the backend
     public static void mainTest(String[] args) {
