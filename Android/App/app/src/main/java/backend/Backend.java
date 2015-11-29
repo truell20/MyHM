@@ -15,7 +15,7 @@ enum HTTPMethod {
 // The class containing the functions to comunicate with our RESTful backend
 public class Backend
 {
-    public static final String domain = "http://www.truellprojects.com/ApPosition/";
+    public static final String domain = "10.0.2.2:80/ApPosition/Backend/";
     
     // IGNORE THIS: This is my main function for testing the backend
     public static void mainTest(String[] args) {
@@ -120,6 +120,7 @@ public class Backend
      * This method may be used for signing a user in.
      */
     public static UserData getUserDataWithSignIn(final String email, final String password) {
+        System.out.println("Start " + email + " " + password);
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("email", email);
                     put("password", password);
@@ -130,6 +131,7 @@ public class Backend
             JSONObject obj = new JSONObject(webContents);
 
             if (obj.getString("email") == "") {
+                System.out.println("Cannot find");
                 System.out.println("That user doesn't exist!");
                 return null;
             }
@@ -143,6 +145,8 @@ public class Backend
 
             return data;
         } catch (Exception e) {
+            System.out.println("Error");
+            e.printStackTrace();
             return null;
         }
     }
