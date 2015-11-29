@@ -27,8 +27,19 @@ class MyAPI extends API
 		}
 	}
 
+	private function select($sql) {
+		$res = mysqli_query($this->mysqli, $sql);
+		return mysqli_fetch_array($res, MYSQLI_ASSOC);
+	}
+
+	private function insert($sql) {
+		mysqli_query($this->mysqli, $sql);
+	}
+
 	// Determines if a User's current location has expired. Is true if the current location was updated during a different period
 	private function isCurrentLocationExpired($currentDateTime, $lastTimeLocationUpdated) {
+		var_dump($currentDateTime);
+		var_dump($lastTimeLocationUpdated);
 		if($currentDateTime->getTimestamp() - $lastTimeLocationUpdated->getTimestamp() >= 60*45) return True;
 		if($currentDateTime->diff($lastTimeLocationUpdated)->days > 0) return True;
 
@@ -50,16 +61,18 @@ class MyAPI extends API
 
 	private function isKeyValid($key, $userID) {
 		$sql = "SELECT password FROM User WHERE userID = $userID";
-		$res = mysqli_query($this->mysqli, $sql);
-		$resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
+		$resultArray = $this->select($sql);
 
 		if(strcmp($resultArray['password'], $key) == 0) return True;
 		else return False;
 	}
 
 	private function removeLocationIfExpired(&$resultArray) {
+		$userID = $resultArray['userID'];
 
 		$lastTimeLocationUpdated = date_create_from_format("Y-m-d H:i:s", $resultArray['lastTimeLocationUpdated']);
+		if($lastTimeLocationUpdated == false) return;
+
 		$currentDateTime = new DateTime();
 
 		if($this->isCurrentLocationExpired($currentDateTime, $lastTimeLocationUpdated) == True) {
