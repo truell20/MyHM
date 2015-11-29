@@ -47,8 +47,7 @@ public class ScheduleFragment extends Fragment {
         for(int a = 0; a < 8; a++) {
             TextView period = new TextView(result.getContext());
             period.setText("Period " + a);
-
-            period.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, 0.12f));
+            period.setLayoutParams(new TableLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, 0.12f));
             period.setGravity(Gravity.CENTER_HORIZONTAL);
             period.setBackgroundResource(R.drawable.back);
 

@@ -5,25 +5,30 @@ A scheduling and location app for the Horace Mann School. Includes an Android ap
 Users see their school schedule, can setup meetings with teachers and peers, can share their current location, and can see the locations of others.
 
 ## TODO
-### Due next Tuesday, 11-17-15 (ACTUALLY)
+### Due next Tuesday, 12-01-15 (ACTUALLY)
 
 - Android
-  - Integrate Backend with Home Tab
+  - Integrate the backend with the Sign in tab
+    - Check to see that the person is a current user
+  - Integrate backend with Home Tab
+    - Display current location
+    - Upload new current location
   - Continue Personal Schedule Tab
-    - Sliding back and forth
-    - Integreate the backend
-    - Show meetings
-  - Finsh the Search Tab
+    - ~~Allow for the displaying of multiple days~~
+    - ~~Sliding back and forth~~
+    - Integrate the backend
+      - Label periods with class name or "Free"
+  - Implement meetings
+    - Creation of meetings fragment
+      - Each meeting has a name, a period, and collaborators
+      - Notify a user through push notifications when someone creates a meeting with their name
+    - Integrate meetings with the backend
+    - Display meetings on the personal schedule tab
+  - Search tab
+    - Build a fragment that allows the user to search for other users by name
+    - A user may be clicked on and their schedule will show up
+    - A user may be favorited d by clicking on a star on the action bar of the user's schedule fragment 
 
-### Future Todo List
+### Future Features
 
-- Android
-  - Finish the Personal Schedule Tab
-    - Implement the creation and showing of meetings
-  - Build Search Tab
-    - Implement the search bar (asynchronous showing of suggestions as you type)
-    - Build the showing of friends schedules (meetings and static periods)
-    - Show friend's current location
-  - Implement favorites feature
-- Backend
-  - Implement favorites list
+- Allow for the requesting of another users location. A request would send a push notification to that user.
