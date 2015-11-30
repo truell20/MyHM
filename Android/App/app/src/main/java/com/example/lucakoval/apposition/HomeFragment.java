@@ -10,29 +10,31 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class HomeFragment extends Fragment {
-    private static final String EMAIL_KEY = "emailKey";
+import com.example.lucakoval.apposition.model.LocalDataHandler;
 
-    private String email = null;
+import backend.Backend;
+import backend.UserData;
+
+public class HomeFragment extends Fragment {
+
+    private String email;
+    private LocalDataHandler dataHandler;
 
     public static HomeFragment newInstance(String email) {
         HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(EMAIL_KEY, email);
-        fragment.setArguments(args);
+        fragment.email = email;
         return fragment;
     }
 
-    public HomeFragment() {
-        // Required empty public constructor
-    }
+    public HomeFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            email = getArguments().getString(EMAIL_KEY);
-        }
+
+        dataHandler = new LocalDataHandler(getContext());
+        System.out.println("2nd " + dataHandler.getUserData());
+
     }
 
     @Override
@@ -41,25 +43,42 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View fragmentView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // Set the title text to the person's email
         TextView home = (TextView) fragmentView.findViewById(R.id.homeText);
         home.setText(email);
 
+        // Setup the menu for selecting locations
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.locationsArray, android.R.layout.simple_spinner_item);
         Spinner spinner = (Spinner) fragmentView.findViewById(R.id.options);
         spinner.setAdapter(adapter);
 
+        // Setup submit button listener
         Button submit = (Button) fragmentView.findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                TextView locationText = (TextView) getView().findViewById(R.id.locationText);
                 Spinner spinner = (Spinner) getView().findViewById(R.id.options);
-
-                locationText.setText(spinner.getSelectedItem().toString());
+                setLocation(spinner.getSelectedItem().toString());
             }
         });
 
         return fragmentView;
+    }
+
+    public void setLocation(String location) {
+        // Set a text view to the new location
+        TextView locationText = (TextView) getView().findViewById(R.id.locationText);
+        locationText.setText(location);
+
+        // Set spinner to location
+        Spinner spinner = (Spinner) getView().findViewById(R.id.options);
+        spinner.setSelection(((ArrayAdapter<CharSequence>)spinner.getAdapter()).getPosition(location));
+
+        // Update remote and local UserData with new location
+        UserData currentUserData = dataHandler.getUserData();
+        currentUserData.currentLocation = location;
+        dataHandler.setUserData(currentUserData);
+        Backend.setUserData(currentUserData);
     }
 
 }

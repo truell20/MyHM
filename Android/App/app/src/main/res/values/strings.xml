@@ -5,10 +5,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
 
     <string name="preferencesFileKey">PREFERENCES_FILE</string>
-    <string name="nameKey">usernameKey</string>
-    <string name="passwordKey">passwordKey</string>
-    <string name="emailKey">emailKey</string>
-    <string name="userIDKey">userIDKey</string>
+    <string name="userDataKey">userDataKey</string>
 
     <string-array name="locationsArray">
         <item>Cafeteria</item>

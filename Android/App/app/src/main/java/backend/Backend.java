@@ -106,7 +106,7 @@ public class Backend
     }
 
     // Sets the UserData of the user who has the userID given
-    public static void setUserData(final UserData userData, final String password) {
+    public static void setUserData(final UserData userData) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("userID", userData.userID);
                     put("firstname", userData.firstName);

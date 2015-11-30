@@ -10,22 +10,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+
+import com.example.lucakoval.apposition.model.LocalDataHandler;
+
 import backend.*;
 
 
 public class MainActivity extends AppCompatActivity {
+    LocalDataHandler dataHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        SharedPreferences settings = getSharedPreferences(getString(R.string.preferencesFileKey), Context.MODE_PRIVATE);
+        dataHandler = new LocalDataHandler(this);
+        dataHandler.clearAllData();
 
-        SharedPreferences.Editor editor = settings.edit();
-        editor.clear();
-        editor.commit();
-
-        if(settings.getString(getString(R.string.emailKey), null) != null) {
+        if(dataHandler.getUserData() != null) {
             Intent i = new Intent(getApplicationContext(), TabActivity.class);
             startActivity(i);
         }
@@ -50,13 +51,10 @@ public class MainActivity extends AppCompatActivity {
                         if(result == null) {
                             findViewById(R.id.errorMessage).setVisibility(View.VISIBLE);
                         } else {
-                            // Store the email and password on the phone
-                            SharedPreferences settings = getSharedPreferences(getString(R.string.preferencesFileKey), Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = settings.edit();
-                            editor.putString(getString(R.string.emailKey), email);
-                            editor.putString(getString(R.string.passwordKey), password);
-                            editor.putInt(getString(R.string.userIDKey), result.userID);
-                            editor.commit();
+                            // Store UserData locally
+                            dataHandler.setUserData(result);
+
+                            System.out.println(dataHandler.getUserData());
 
                             // Go to the TabActivity
                             Intent i = new Intent(getApplicationContext(), TabActivity.class);
