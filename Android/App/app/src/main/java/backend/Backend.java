@@ -94,7 +94,9 @@ public class Backend
 
         new QueryURLTask(new QueryURLCallback() {
             @Override
-            public void onFinish(String result) { System.out.println(result); }
+            public void onFinish(String result) {
+                if(result != null) System.out.println(result);
+            }
         }).execute(new QueryURLParams(domain + "credentials", HTTPMethod.PUT, arguments));
     }
 

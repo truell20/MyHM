@@ -28,6 +28,7 @@ public class MeetingFragment extends Fragment {
         MeetingFragment fragment = new MeetingFragment();
         fragment.dayIndex = dayNumber;
         fragment.periodIndex = periodIndex;
+        fragment.callback = callback;
         return fragment;
     }
 

@@ -53,14 +53,17 @@ public class ScheduleHolderFragment extends Fragment {
                 public void displayFragment(Fragment f, String tag) {
                     getView().findViewById(R.id.schedulePager).setVisibility(View.INVISIBLE);
 
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    FragmentTransaction ft = getChildFragmentManager().beginTransaction();
                     ft.add(R.id.scheduleTabContainer, f, tag).commit();
                 }
 
                 @Override
                 public void removeFragment(String tag) {
-                    Fragment f = getFragmentManager().findFragmentByTag(tag);
-                    if(f != null) getFragmentManager().beginTransaction().remove(f);
+                    Fragment f = getChildFragmentManager().findFragmentByTag(tag);
+                    if(f != null) {
+                        System.out.println("NOT NULL");
+                        getChildFragmentManager().beginTransaction().remove(f).commit();
+                    } else System.out.println("NLL");
 
                     getView().findViewById(R.id.schedulePager).setVisibility(View.VISIBLE);
                 }
