@@ -30,6 +30,7 @@ public class QueryURLTask extends AsyncTask<QueryURLParams, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
+        System.out.println("Finished task");
         if (callback != null) callback.onFinish(result);
     }
 
@@ -74,7 +75,7 @@ public class QueryURLTask extends AsyncTask<QueryURLParams, Void, String> {
             exception.printStackTrace();
             return null;
         }
-
+        System.out.println(url.toString());
         HttpURLConnection connection = null;
         DataOutputStream dataOutputStream = null;
         try {

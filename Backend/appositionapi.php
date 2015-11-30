@@ -38,8 +38,6 @@ class MyAPI extends API
 
 	// Determines if a User's current location has expired. Is true if the current location was updated during a different period
 	private function isCurrentLocationExpired($currentDateTime, $lastTimeLocationUpdated) {
-		var_dump($currentDateTime);
-		var_dump($lastTimeLocationUpdated);
 		if($currentDateTime->getTimestamp() - $lastTimeLocationUpdated->getTimestamp() >= 60*45) return True;
 		if($currentDateTime->diff($lastTimeLocationUpdated)->days > 0) return True;
 
@@ -159,8 +157,7 @@ class MyAPI extends API
 			$key = $putVars['key'];
 
 			if($this->isKeyValid($key, $userID) == False) {
-				echo "Invalid key";
-				exit(1);
+				return "Invalid key";
 			}
 
 			// This will hold the names of the columns that the caller has given us values for

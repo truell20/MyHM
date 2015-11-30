@@ -8,6 +8,7 @@
     <string name="nameKey">usernameKey</string>
     <string name="passwordKey">passwordKey</string>
     <string name="emailKey">emailKey</string>
+    <string name="userIDKey">userIDKey</string>
 
     <string-array name="locationsArray">
         <item>Cafeteria</item>

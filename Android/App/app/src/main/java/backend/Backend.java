@@ -19,7 +19,7 @@ enum HTTPMethod {
 public class Backend
 {
 
-    public static final String domain = "http://10.0.2.2:80/ApPosition/Backend/";
+    public static final String domain = "http://truellprojects.com/ApPosition/";
     
     // IGNORE THIS: This is my main function for testing the backend
     public static void mainTest(String[] args) {
@@ -139,6 +139,7 @@ public class Backend
         new QueryURLTask(new QueryURLCallback() {
             @Override
             public void onFinish(String result) {
+                System.out.println("Started first callback");
                 try {
                     JSONObject obj = new JSONObject(result);
 

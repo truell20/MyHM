@@ -36,32 +36,37 @@ public class MainActivity extends AppCompatActivity {
 
         // When button is clicked, save email and password and launch home tab
         signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
             public void onClick(View v) {
                 EditText emailInput = (EditText) findViewById(R.id.emailInput);
-                String email = emailInput.getText().toString();
+                final String email = emailInput.getText().toString();
 
                 EditText passwordInput = (EditText) findViewById(R.id.passwordInput);
-                String password = passwordInput.getText().toString();
+                final String password = passwordInput.getText().toString();
 
-                UserData userData = Backend.getUserDataWithSignIn(email, password);
+                Backend.getUserDataWithSignIn(email, password, new BackendCallback<UserData>() {
+                    @Override
+                    public void callback(UserData result) {
+                        if(result == null) {
+                            findViewById(R.id.errorMessage).setVisibility(View.VISIBLE);
+                        } else {
+                            // Store the email and password on the phone
+                            SharedPreferences settings = getSharedPreferences(getString(R.string.preferencesFileKey), Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = settings.edit();
+                            editor.putString(getString(R.string.emailKey), email);
+                            editor.putString(getString(R.string.passwordKey), password);
+                            editor.putInt(getString(R.string.userIDKey), result.userID);
+                            editor.commit();
 
-                if(userData == null) {
-                    findViewById(R.id.errorMessage).setVisibility(View.VISIBLE);
-                } else {
-                    // Store the email and password on the phone
-                    SharedPreferences settings = getSharedPreferences(getString(R.string.preferencesFileKey), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = settings.edit();
-                    editor.putString(getString(R.string.emailKey), email);
-                    editor.putString(getString(R.string.passwordKey), password);
-                    editor.commit();
+                            // Go to the TabActivity
+                            Intent i = new Intent(getApplicationContext(), TabActivity.class);
+                            startActivity(i);
 
-                    // Go to the TabActivity
-                    Intent i = new Intent(getApplicationContext(), TabActivity.class);
-                    startActivity(i);
-
-                    // Kill the Sign In activity
-                    finish();
-                }
+                            // Kill the Sign In activity
+                            finish();
+                        }
+                    }
+                });
             }
         });
      }
