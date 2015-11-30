@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,16 +24,24 @@ import org.w3c.dom.Text;
 import backend.Backend;
 import backend.BackendCallback;
 import backend.Day;
+import backend.Meeting;
 import backend.Period;
 
+interface ScheduleInterface {
+    void displayFragment(Fragment f, String tag);
+    void removeFragment(String tag);
+}
 
 public class ScheduleFragment extends Fragment {
     int dayIndex = -1;
     LocalDataHandler dataHandler;
+    ScheduleInterface callbackInterface;
 
-    public static ScheduleFragment newInstance(int dayNumber) {
+    public static ScheduleFragment newInstance(int dayNumber, ScheduleInterface callbackInterface) {
         ScheduleFragment fragment = new ScheduleFragment();
         fragment.dayIndex = dayNumber;
+        fragment.callbackInterface = callbackInterface;
+
         return fragment;
     }
 
@@ -52,6 +61,8 @@ public class ScheduleFragment extends Fragment {
 
         ((TextView)fragmentView.findViewById(R.id.dayLabel)).setText("Day " + (dayIndex+1));
 
+        // Get the day assigned to this schedule. If it is not stored locally,
+        // Then get it from remote backend and store it locally.
         Day day = dataHandler.getDay(dayIndex);
         System.out.println(day);
         if(day == null) {
@@ -72,15 +83,29 @@ public class ScheduleFragment extends Fragment {
             setupSchedule(day, fragmentView);
         }
 
-
         return fragmentView;
     }
 
     public void setupSchedule(Day day, View view) {
         LinearLayout layout = (LinearLayout)view.findViewById(R.id.linearLayout);
         for(int a = 0; a < day.getPeriods().size(); a++) {
-            TextView textView = styleTextViewWithPeriod(view.getContext(), day.getPeriods().get(a));
-            layout.addView(textView);
+            final int periodIndex = a;
+            TextView periodView = styleTextViewWithPeriod(view.getContext(), day.getPeriods().get(a));
+            // When text view of period is clicked,
+            // open new activity or fragment that lets you set up a meeting.
+            periodView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MeetingFragment meetingFragment = MeetingFragment.newInstance(dayIndex, periodIndex, new MeetingCallback() {
+                        @Override
+                        public void callback(Meeting meeting) {
+                            callbackInterface.removeFragment("meeting");
+                        }
+                    });
+                    callbackInterface.displayFragment(meetingFragment, "meeting");
+                }
+            });
+            layout.addView(periodView);
         }
     }
 

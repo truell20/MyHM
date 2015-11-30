@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 
 public class ScheduleHolderFragment extends Fragment {
     private ScheduleAdapter adapter;
@@ -32,7 +34,7 @@ public class ScheduleHolderFragment extends Fragment {
         View result = inflater.inflate(R.layout.fragement_schedule_holder, container, false);
 
         adapter = new ScheduleAdapter(getChildFragmentManager());
-        pager = (ViewPager)result.findViewById(R.id.scheduleContainer);
+        pager = (ViewPager)result.findViewById(R.id.schedulePager);
         pager.setAdapter(adapter);
 
         return result;
@@ -46,7 +48,23 @@ public class ScheduleHolderFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return ScheduleFragment.newInstance(position);
+            return ScheduleFragment.newInstance(position, new ScheduleInterface() {
+                @Override
+                public void displayFragment(Fragment f, String tag) {
+                    getView().findViewById(R.id.schedulePager).setVisibility(View.INVISIBLE);
+
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.add(R.id.scheduleTabContainer, f, tag).commit();
+                }
+
+                @Override
+                public void removeFragment(String tag) {
+                    Fragment f = getFragmentManager().findFragmentByTag(tag);
+                    if(f != null) getFragmentManager().beginTransaction().remove(f);
+
+                    getView().findViewById(R.id.schedulePager).setVisibility(View.VISIBLE);
+                }
+            });
         }
 
         @Override
