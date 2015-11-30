@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                             // Store UserData locally
                             dataHandler.setUserData(result);
 
-                            System.out.println(dataHandler.getUserData());
+                            System.out.println(dataHandler.getUserData().currentLocation);
 
                             // Go to the TabActivity
                             Intent i = new Intent(getApplicationContext(), TabActivity.class);

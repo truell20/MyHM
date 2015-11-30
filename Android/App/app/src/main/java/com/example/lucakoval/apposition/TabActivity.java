@@ -64,7 +64,7 @@ public class TabActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            if(position == 0) return HomeFragment.newInstance("michael");
+            if(position == 0) return HomeFragment.newInstance();
             else return ScheduleHolderFragment.newInstance();
         }
 

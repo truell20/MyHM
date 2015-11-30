@@ -8,11 +8,11 @@ Users see their school schedule, can setup meetings with teachers and peers, can
 ### Due next Tuesday, 12-01-15 (ACTUALLY)
 
 - Android
-  - Integrate the backend with the Sign in tab
-    - Check to see that the person is a current user
-  - Integrate backend with Home Tab
-    - Display current location
-    - Upload new current location
+  - ~~Integrate the backend with the Sign in tab~~
+    - ~~Check to see that the person is a current user~~
+  - ~~Integrate backend with Home Tab~~
+    - ~~Display current location~~
+    - ~~Upload new current location~~s
   - Continue Personal Schedule Tab
     - ~~Allow for the displaying of multiple days~~
     - ~~Sliding back and forth~~

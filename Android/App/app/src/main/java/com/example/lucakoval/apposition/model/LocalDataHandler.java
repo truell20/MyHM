@@ -27,11 +27,11 @@ public class LocalDataHandler {
 
     public void setUserData(UserData data) {
         editor.putString(context.getString(R.string.userDataKey), new Gson().toJson(data));
-        editor.apply();
+        editor.commit();
     }
 
     public void clearAllData() {
         editor.clear();
-        editor.apply();
+        editor.commit();
     }
 }

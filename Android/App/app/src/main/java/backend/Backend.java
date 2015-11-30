@@ -46,23 +46,8 @@ public class Backend
             @Override
             public void onFinish(String result) {
                 try {
-                    JSONObject obj = new JSONObject(result);
-
-                    if (obj.getString("email") == "") {
-                        System.out.println("That user doesn't exist!");
-                        callback.callback(null);
-                    }
-
-                    UserData data = new UserData();
-                    data.email = obj.getString("email");
-                    data.firstName = obj.getString("firstname");
-                    data.lastName = obj.getString("lastname");
-                    data.password = obj.getString("password");
-                    data.userID = userID;
-
-                    callback.callback(data);
+                    callback.callback(UserData.userDataFromJSON(new JSONObject(result)));
                 } catch (Exception e) {
-                    System.out.println("There was a problem getting UserData");
                     callback.callback(null);
                 }
             }
@@ -81,20 +66,9 @@ public class Backend
             public void onFinish(String result) {
                 try {
                     JSONArray arrayOfUsers = new JSONArray(result);
-
                     ArrayList<UserData> returnList = new ArrayList<UserData>();
 
-                    for (int a = 0; a < arrayOfUsers.length(); a++) {
-                        JSONObject user = arrayOfUsers.getJSONObject(a);
-
-                        UserData data = new UserData();
-                        data.email = user.getString("email");
-                        data.firstName = user.getString("firstname");
-                        data.lastName = user.getString("lastname");
-                        data.userID = user.getInt("userID");
-
-                        returnList.add(data);
-                    }
+                    for (int a = 0; a < arrayOfUsers.length(); a++) returnList.add(UserData.userDataFromJSON(arrayOfUsers.getJSONObject(a)));
 
                     callback.callback(returnList);
                 } catch (Exception e) {
@@ -141,22 +115,7 @@ public class Backend
             public void onFinish(String result) {
                 System.out.println("Started first callback");
                 try {
-                    JSONObject obj = new JSONObject(result);
-
-                    if (obj.getString("email") == "") {
-                        System.out.println("Cannot find");
-                        System.out.println("That user doesn't exist!");
-                        callback.callback(null);
-                    }
-
-                    UserData data = new UserData();
-                    data.email = email;
-                    data.firstName = obj.getString("firstname");
-                    data.lastName = obj.getString("lastname");
-                    data.password = password;
-                    data.userID = obj.getInt("userID");
-
-                    callback.callback(data);
+                    callback.callback(UserData.userDataFromJSON(new JSONObject(result)));
                 } catch (Exception e) {
                     System.out.println("Error");
                     e.printStackTrace();
