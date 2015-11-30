@@ -13,6 +13,8 @@ import android.widget.EditText;
 
 import com.example.lucakoval.apposition.model.LocalDataHandler;
 
+import java.util.ArrayList;
+
 import backend.*;
 
 
@@ -24,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         dataHandler = new LocalDataHandler(this);
-        dataHandler.clearAllData();
 
         if(dataHandler.getUserData() != null) {
             Intent i = new Intent(getApplicationContext(), TabActivity.class);
@@ -53,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             // Store UserData locally
                             dataHandler.setUserData(result);
-
-                            System.out.println(dataHandler.getUserData().currentLocation);
 
                             // Go to the TabActivity
                             Intent i = new Intent(getApplicationContext(), TabActivity.class);

@@ -6,6 +6,7 @@
 
     <string name="preferencesFileKey">PREFERENCES_FILE</string>
     <string name="userDataKey">userDataKey</string>
+    <string name="scheduleKey">scheduleKey</string>
 
     <string-array name="locationsArray">
         <item>Cafeteria</item>

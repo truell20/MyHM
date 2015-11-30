@@ -125,8 +125,7 @@ public class Backend
         }).execute(new QueryURLParams(domain + "credentials", HTTPMethod.GET, arguments));
     }
 
-    // Gets a day in a user's schedule using their userID and the number of the day (ranging from 0 - Day.numberOfPeriods)
-    // If distanceFromToday = 0, then today is returned. If distanceFromToday = 1, tomorrow is returned, and so on
+    // Gets a day in a user's schedule using their userID and the days index (from 0-9) on the 10 day schedule
     public static void getDay(final int dayIndex, final int userID, final BackendCallback<Day> callback) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
                     put("day", dayIndex);
@@ -139,13 +138,18 @@ public class Backend
                     JSONArray periods = new JSONArray(result);
                     Day day = new Day();
 
-                    for (int a = 0; a < periods.length(); a++) {
-                        JSONObject period = periods.getJSONObject(a);
-                        day.setPeriod(period.getInt("period"), new Period(period.getString("name")));
+                    for (int a = 0; a < Period.numberOfPeriods; a++) {
+                        try{
+                            JSONObject period = periods.getJSONObject(a);
+                            day.setPeriod(a, new Period(period.getString("name")));
+                        } catch (Exception e) {
+                            day.setPeriod(a, new Period("Free"));
+                        }
                     }
 
                     callback.callback(day);
                 } catch (Exception e) {
+                    e.printStackTrace();
                     callback.callback(null);
                 }
             }

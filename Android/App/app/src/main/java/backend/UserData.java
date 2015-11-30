@@ -32,11 +32,15 @@ public class UserData implements java.io.Serializable {
             data.lastName = json.getString("lastname");
             data.email = json.getString("email");
             data.password = json.getString("password");
-            data.currentLocation = json.getString("currentLocation");
-            return data;
         } catch (Exception e) {
             return null;
         }
+
+        // Optional parameter
+        try {
+            data.currentLocation = json.getString("currentLocation");
+        } catch (Exception e) { }
+        return data;
     }
 
 }

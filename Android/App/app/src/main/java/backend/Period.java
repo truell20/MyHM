@@ -4,6 +4,8 @@ package backend;
  * Each period has a name.
  */
 public class Period {
+    public static final int numberOfPeriods = 8;
+
     public String name;
     
     public Period() {

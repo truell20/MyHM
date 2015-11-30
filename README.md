@@ -16,8 +16,8 @@ Users see their school schedule, can setup meetings with teachers and peers, can
   - Continue Personal Schedule Tab
     - ~~Allow for the displaying of multiple days~~
     - ~~Sliding back and forth~~
-    - Integrate the backend
-      - Label periods with class name or "Free"
+    - ~~Integrate the backend~~
+      - ~~Label periods with class name or "Free"~~
   - Implement meetings
     - Creation of meetings fragment
       - Each meeting has a name, a period, and collaborators

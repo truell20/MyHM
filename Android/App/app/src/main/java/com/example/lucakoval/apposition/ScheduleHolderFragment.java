@@ -46,7 +46,7 @@ public class ScheduleHolderFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return ScheduleFragment.newInstance(position+1);
+            return ScheduleFragment.newInstance(position);
         }
 
         @Override

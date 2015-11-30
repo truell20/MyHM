@@ -6,21 +6,21 @@ import java.util.ArrayList;
  * Each period in the day is an object of the Period class
  */
 public class Day {
-    private final int numberOfPeriods = 8;
+    public static final int numberOfDays = 10;
     
     private ArrayList<Period> periods = new ArrayList<Period>();
     
     // Initializes periods
     public Day() {
-        for(int a = 0; a < numberOfPeriods; a++) {
-            periods.add(new Period());
+        for(int a = 0; a < Period.numberOfPeriods; a++) {
+            periods.add(null);
         }
     }
     
     // Change the period at the index specified
     // If the index specified < 0 or >= numberOfPeriods, no period is changed
     public void setPeriod(int periodIndex, Period newPeriod) {
-        if(periodIndex > -1 && periodIndex < numberOfPeriods) {
+        if(periodIndex > -1 && periodIndex < Period.numberOfPeriods) {
             periods.set(periodIndex, newPeriod);
         } else {
             System.out.println("Cannot set that period.\n");
