@@ -65,18 +65,20 @@ public class TabActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             if(position == 0) return HomeFragment.newInstance();
-            else return ScheduleHolderFragment.newInstance();
+            else if(position == 1) return ScheduleHolderFragment.newInstance();
+            else return SearchFragment.newInstance();
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             if(position == 0) return "Home";
-            else return "Schedule";
+            else if(position == 1) return "Schedule";
+            else return "Search";
         }
     }
 }

@@ -68,7 +68,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Donef"
+        android:text="Done"
         android:id="@+id/doneButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
