@@ -21,11 +21,9 @@ import com.example.lucakoval.apposition.model.LocalDataHandler;
 
 import org.w3c.dom.Text;
 
-import backend.Backend;
-import backend.BackendCallback;
-import backend.Day;
-import backend.Meeting;
-import backend.Period;
+import java.util.ArrayList;
+
+import backend.*;
 
 interface ScheduleInterface {
     void displayFragment(Fragment f, String tag);
@@ -66,9 +64,7 @@ public class ScheduleFragment extends Fragment {
         Day day = dataHandler.getDay(dayIndex);
         System.out.println(day);
         if(day == null) {
-            System.out.println("null");
-            final int userID = dataHandler.getUserData().userID;
-            Backend.getDay(dayIndex, userID, new BackendCallback<Day>() {
+            Backend.getDay(dayIndex, dataHandler.getUserData().userID, new BackendCallback<Day>() {
                 @Override
                 public void callback(Day result) {
                     // Populate LinearLayout with Periods
@@ -83,6 +79,20 @@ public class ScheduleFragment extends Fragment {
             setupSchedule(day, fragmentView);
         }
 
+        // Setup meetings
+        Backend.getMeetings(dataHandler.getUserData().userID, dayIndex, new BackendCallback<ArrayList<Meeting>>() {
+            @Override
+            public void callback(ArrayList<Meeting> result) {
+                if(result != null) {
+                    for(Meeting meeting : result){
+                        System.out.println("Meeting");
+                        System.out.println(meeting.name);
+                        addMeetingToUI(meeting);
+                    }
+                }
+            }
+        });
+
         return fragmentView;
     }
 
@@ -91,6 +101,7 @@ public class ScheduleFragment extends Fragment {
         for(int a = 0; a < day.getPeriods().size(); a++) {
             final int periodIndex = a;
             TextView periodView = styleTextViewWithPeriod(view.getContext(), day.getPeriods().get(a));
+            periodView.setId(periodViewID(a));
             // When text view of period is clicked,
             // open new activity or fragment that lets you set up a meeting.
             periodView.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +110,7 @@ public class ScheduleFragment extends Fragment {
                     MeetingFragment meetingFragment = MeetingFragment.newInstance(dayIndex, periodIndex, new MeetingCallback() {
                         @Override
                         public void callback(Meeting meeting) {
+                            Backend.addMeeting(meeting);
                             callbackInterface.removeFragment("meeting");
                         }
                     });
@@ -117,5 +129,14 @@ public class ScheduleFragment extends Fragment {
         textView.setBackgroundResource(R.drawable.back);
 
         return textView;
+    }
+
+    public void addMeetingToUI(Meeting meeting) {
+        TextView periodView = (TextView)getView().findViewById(periodViewID(meeting.periodIndex));
+        periodView.setText(periodView.getText()+"\nMEETING: " + meeting.name);
+    }
+
+    public int periodViewID(int periodIndex) {
+        return getActivity().getResources().getIdentifier("periodView" + periodIndex, "id", getActivity().getPackageName());
     }
 }

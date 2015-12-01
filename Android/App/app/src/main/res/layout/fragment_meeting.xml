@@ -3,36 +3,27 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.lucakoval.apposition.MeetingFragment">\
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Donef"
-        android:id="@+id/doneButton"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="110dp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
-        android:ems="10"
-        android:id="@+id/emailInput"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/emailText"
-        android:layout_centerHorizontal="true" />
+    tools:context="com.example.lucakoval.apposition.MeetingFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Name:"
-        android:id="@+id/emailText"
+        android:id="@+id/nameText"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/nameInput"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/nameText"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,7 +31,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Location:"
         android:id="@+id/locationText"
-        android:layout_below="@+id/emailInput"
+        android:layout_below="@+id/nameInput"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
 
@@ -73,6 +64,15 @@
         android:id="@+id/periodOptions"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Donef"
+        android:id="@+id/doneButton"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="110dp" />
 
 
 </RelativeLayout>

@@ -3,6 +3,7 @@ package backend;
 import android.app.DownloadManager;
 import android.os.AsyncTask;
 
+import java.lang.reflect.Field;
 import java.util.Scanner;
 import java.io.*;
 import java.net.*;
@@ -10,6 +11,7 @@ import org.json.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
+
 
 enum HTTPMethod {
     GET, POST, PUT;
@@ -81,23 +83,9 @@ public class Backend
 
     // Sets the UserData of the user who has the userID given
     public static void setUserData(final UserData userData) {
-        HashMap<String,Object> arguments = new HashMap<String,Object>() {{
-                    put("userID", userData.userID);
-                    put("firstname", userData.firstName);
-                    put("lastname", userData.lastName);
-                    put("email", userData.email);
-                    put("password", userData.password);
-                    put("currentLocation", userData.currentLocation);
-                    
-                    put("key", userData.password);
-                }};
+        HashMap<String,Object> arguments = argumentArrayWithObject(userData);
 
-        new QueryURLTask(new QueryURLCallback() {
-            @Override
-            public void onFinish(String result) {
-                if(result != null) System.out.println(result);
-            }
-        }).execute(new QueryURLParams(domain + "credentials", HTTPMethod.PUT, arguments));
+        new QueryURLTask(null).execute(new QueryURLParams(domain + "credentials", HTTPMethod.PUT, arguments));
     }
 
     /* Returns the UserData the user whose email and password match the ones given.
@@ -157,36 +145,43 @@ public class Backend
             }
         }).execute(new QueryURLParams(domain + "classes", HTTPMethod.GET, arguments));
     }
-    
-    public static void getMeetings(final String date, final int userID, final BackendCallback<ArrayList<Meeting>> callback) {
+
+    public static void getMeetings(final int userID, final int dayIndex, final BackendCallback<ArrayList<Meeting>> callback) {
         HashMap<String,Object> arguments = new HashMap<String,Object>() {{
-                    put("date", date);
-                    put("userID", userID);
-                }};
+            put("userID", userID);
+            put("dayIndex", dayIndex);
+        }};
         new QueryURLTask(new QueryURLCallback() {
             @Override
             public void onFinish(String result) {
                 try {
                     JSONArray jsonMeetings = new JSONArray(result);
-
                     ArrayList<Meeting> meetings = new ArrayList<Meeting>();
 
                     for (int a = 0; a < jsonMeetings.length(); a++) {
-                        JSONObject jsonMeeting = jsonMeetings.getJSONObject(a);
-
-                        Meeting meeting = new Meeting();
-                        meeting.name = jsonMeeting.getString("name");
-                        meeting.beginningDateTime = jsonMeeting.getString("beginning");
-                        meeting.endDateTime = jsonMeeting.getString("ending");
-                        JSONArray memberIDs = jsonMeeting.getJSONArray("members");
-                        for (int b = 0; b < memberIDs.length(); b++) {
-                            meeting.memberIDs.add(memberIDs.getInt(b));
-                        }
-
-                        meetings.add(meeting);
+                        meetings.add(Meeting.meetingFromJSON(jsonMeetings.getJSONObject(a)));
                     }
 
                     callback.callback(meetings);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    callback.callback(null);
+                }
+            }
+        }).execute(new QueryURLParams(domain + "meetings", HTTPMethod.GET, arguments));
+    }
+    
+    public static void getMeeting(final int userID, final int dayIndex, final int periodIndex, final BackendCallback<Meeting> callback) {
+        HashMap<String,Object> arguments = new HashMap<String,Object>() {{
+            put("userID", userID);
+            put("dayIndex", dayIndex);
+            put("periodIndex", periodIndex);
+        }};
+        new QueryURLTask(new QueryURLCallback() {
+            @Override
+            public void onFinish(String result) {
+                try {
+                    callback.callback(Meeting.meetingFromJSON(new JSONObject(result)));
                 } catch (Exception e) {
                     callback.callback(null);
                 }
@@ -194,4 +189,25 @@ public class Backend
         }).execute(new QueryURLParams(domain + "meetings", HTTPMethod.GET, arguments));
     }
 
+    public static void addMeeting(Meeting meeting) {
+        HashMap<String,Object> arguments = argumentArrayWithObject(meeting);
+        new QueryURLTask(new QueryURLCallback() {
+            @Override
+            public void onFinish(String result) {
+                System.out.println(result);
+            }
+        }).execute(new QueryURLParams(domain+"meetings", HTTPMethod.POST, arguments));
+    }
+
+    // PRIVATE FUNCTIONS
+    private static HashMap<String,Object> argumentArrayWithObject(Object o) {
+        HashMap<String,Object> arguments = new HashMap<String,Object>();
+        for (Field f : o.getClass().getDeclaredFields()) {
+            try {
+                arguments.put(f.getName(), f.get(o));
+                System.out.println(f.getName());
+            } catch (Exception e) {}
+        }
+        return arguments;
+    }
 }

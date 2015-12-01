@@ -9,9 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.example.lucakoval.apposition.model.LocalDataHandler;
+
+import java.util.ArrayList;
 
 import backend.Meeting;
 import backend.Period;
@@ -67,12 +70,23 @@ public class MeetingFragment extends Fragment {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Meeting meeting = new Meeting();
+                Meeting meeting = getMeetingFromUI();
                 callback.callback(meeting);
             }
         });
 
         return fragmentView;
+    }
+
+    private Meeting getMeetingFromUI() {
+        Meeting meeting = new Meeting();
+
+        meeting.name = ((EditText)getView().findViewById(R.id.nameInput)).getText().toString();
+        meeting.dayIndex = dayIndex;
+        meeting.periodIndex = periodIndex;
+        meeting.memberIDs.add(dataHandler.getUserData().userID);
+
+        return meeting;
     }
 
 }

@@ -32,6 +32,17 @@ class MyAPI extends API
 		return mysqli_fetch_array($res, MYSQLI_ASSOC);
 	}
 
+	private function selectMultiple($sql) {
+		$res = mysqli_query($this->mysqli, $sql);
+		$finalArray = array();
+
+		while($temp = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+			array_push($finalArray, $temp);
+		}
+
+		return $finalArray;
+	}
+
 	private function insert($sql) {
 		mysqli_query($this->mysqli, $sql);
 	}
@@ -65,7 +76,7 @@ class MyAPI extends API
 		else return False;
 	}
 
-	private function removeLocationIfExpired(&$resultArray) {
+	private function removeLocationIfExpired($resultArray) {
 		$userID = $resultArray['userID'];
 
 		$lastTimeLocationUpdated = date_create_from_format("Y-m-d H:i:s", $resultArray['lastTimeLocationUpdated']);
@@ -77,6 +88,8 @@ class MyAPI extends API
 			mysqli_query($this->mysqli,"UPDATE User SET currentLocation = '' WHERE userID = $userID");
 			unset($resultArray['currentLocation']);
 		}
+
+		return $resultArray;
 	}
 
 	/// Returns an associated array with a meetings credentials
@@ -97,7 +110,29 @@ class MyAPI extends API
 		return $resultArray;
 	}
 
-	// API ENDPOINTS
+	private function sqlFromArguments($arguments, $tableName, $whereCondition) {
+		// This will hold the names of the columns that the caller has given us values for
+		$availableColumns = array();
+		$rowsResult = mysqli_query($this->mysqli, "SHOW COLUMNS FROM User");
+		while ($row = mysqli_fetch_assoc($rowsResult)) {
+			if(isset($putVars[$row['Field']])) {
+				array_push($availableColumns, $row['Field']);
+			}
+		}
+
+		// Building the query based on the items the caller has given us
+		$query = "UPDATE $tableName SET ";
+		for($a = 0; $a < count($availableColumns); $a++) {
+			$columnName = $availableColumns[$a];
+			if($a == count($availableColumns) - 1) $query .= "$columnName = '$putVars[$columnName]'";
+			else $query .= "$columnName = '$putVars[$columnName]', ";
+		}
+		$query .= " ".$whereCondition;
+
+		return $query;
+	}
+
+	//--------------------- API ENDPOINTS ------------------------\\
 
 	// Endpoint associated with a users credentials (everything in the User table; i.e. name, email, firstname, etc.)
 	protected function credentials() {
@@ -107,45 +142,21 @@ class MyAPI extends API
 			if(isset($_GET['userID'])) {
 				$userID = $_GET['userID'];
 
-				$sql = "SELECT * FROM User WHERE userID = $userID";
-				$res = mysqli_query($this->mysqli, $sql);
-				$resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
-
-				$this->removeLocationIfExpired($resultArray);
-
-				return $resultArray;
+				return $this->removeLocationIfExpired($this->select("SELECT * FROM User WHERE userID = $userID"));
 			} else if(isset($_GET['email']) && isset($_GET['password'])) {
 				$email = $this->mysqli->escape_string($_GET['email']);
 				$password = $this->mysqli->escape_string($_GET['password']);
 
-				$sql = "SELECT * FROM User WHERE email = '$email' AND password = '$password'";
-				$res = mysqli_query($this->mysqli, $sql);
-				$resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC);
-
-				$this->removeLocationIfExpired($resultArray);
-
-				return $resultArray;
+				return $this->removeLocationIfExpired($this->select("SELECT * FROM User WHERE email = '$email' AND password = '$password'"));
 			} else if(isset($_GET['searchTerm'])) {
 				$searchTerm = $_GET['searchTerm'];
-
-				$sql = "SELECT userID, firstname, lastname, email FROM User WHERE name LIKE '$searchTerm'";
-				$res = mysqli_query($this->mysqli, $sql);
-
-				$returnArray = array();
-
-				while($resultArray = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
-					$this->removeLocationIfExpired($resultArray);
-					array_push($returnArray, $resultArray);
-				}
-
-				return $returnArray;
+				return $this->selectMultiple("SELECT userID, firstName, lastName, email FROM User WHERE 
+					LCASE(firstName) LIKE LCASE('%$searchTerm%') 
+					OR LCASE(lastName) LIKE LCASE('%$searchTerm%')");
 			} else {
 				return "Error: Invalid request";
 			}
 		} else if($this->method == 'PUT'){
-			// Sleep for one second to stop brute force attacks
-			sleep(1);
-
 			parse_str($this->file, $putVars);
 			
 			// If there is no userID
@@ -156,28 +167,10 @@ class MyAPI extends API
 			$userID = $putVars['userID'];
 			$key = $putVars['key'];
 
-			if($this->isKeyValid($key, $userID) == False) {
-				return "Invalid key";
-			}
+			if($this->isKeyValid($key, $userID) == False)  return "Invalid key";
 
-			// This will hold the names of the columns that the caller has given us values for
-			$availableColumns = array();
-			$rowsResult = mysqli_query($this->mysqli, "SHOW COLUMNS FROM User");
-			while ($row = mysqli_fetch_assoc($rowsResult)) {
-				if(isset($putVars[$row['Field']]) && strcmp($row['Field'], "userID") != 0) {
-					array_push($availableColumns, $row['Field']);
-				}
-			}
-
-			// Building the query based on the items the caller has given us
-			$query = "UPDATE User SET ";
-			foreach($availableColumns as $columnName) $query .= "$columnName = '$putVars[$columnName]', ";
-			
-			// Add update the lastTimeLocationUpdated column
-			$query .= " lastTimeLocationUpdated = '".date('Y-m-d H:i:s')."'";
-			
-			// Add where condition to query
-			$query .= " WHERE userID = $userID";
+			unset($array['userID']);
+			$query = $this->sqlFromArguments($putVars, "User", "WHERE userID = $userID");
 
 			mysqli_query($this->mysqli, $query);
 
@@ -194,13 +187,7 @@ class MyAPI extends API
 			$userID = $_GET['userID'];
 			$day = $_GET['day'];
 
-			$sql = "SELECT period, name FROM Period WHERE userID = $userID AND day = $day";
-			$res = mysqli_query($this->mysqli, $sql);
-			$resultArray = array();
-			while($holder = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
-				array_push($resultArray, $holder);
-			}           
-			return $resultArray;
+			return $this->selectMultiple("SELECT period, name FROM Period WHERE userID = $userID AND day = $day");
 		} else {
 			return "Error: Invalid request";
 		}
@@ -208,8 +195,8 @@ class MyAPI extends API
 
 	// Endpoint associated with a User's meetings
 	protected function meetings() {
-		// Get meetings with date and userID
-		if ($this->method == 'GET' && isset($_GET['userID']) && isset($_GET['date'])) {
+		/*// Get meetings with date and userID
+		if (isset($_GET['userID']) && isset($_GET['date'])) {
 			$userID = $_GET['userID'];
 			$date = $_GET['date'];
 
@@ -230,10 +217,49 @@ class MyAPI extends API
 			}  
 
 			return $returnArray;
-		} else if($this->method == 'GET' && isset($_GET['meetingID'])) {
+		} else*/ if(isset($_GET['meetingID'])) {
 			$meetingID = $_GET['meetingID'];
 
 			return $this->getMeetingWithID($meetingID);
+		} else if(isset($_GET['userID']) && isset($_GET['dayIndex'])) {
+			$userID = $_GET['userID'];
+			$dayIndex = $_GET['dayIndex'];
+
+			$meetingsForUser = $this->selectMultiple("SELECT meetingID FROM MeetingToUser WHERE userID = $userID");
+
+			$returnMeetings = array();
+			foreach($meetingsForUser as $meetingIDArray) {
+				$meeting = $this->getMeetingWithID($meetingIDArray['meetingID']);
+				if($meeting['dayIndex'] == $dayIndex) array_push($returnMeetings, $meeting);
+			}
+
+			return $returnMeetings;
+		} else if(isset($_GET['userID']) && isset($_GET['dayIndex']) && isset($_GET['periodIndex'])) {
+			$userID = $_GET['userID'];
+			$dayIndex = $_GET['dayIndex'];
+			$periodIndex = $_GET['periodIndex'];
+
+			$meetingsForUser = $this->selectMultiple("SELECT meetingID FROM MeetingToUser WHERE userID = $userID");
+
+			foreach($meetingsForUser as $meetingIDArray) {
+				$meeting = $this->getMeetingWithID($meetingIDArray['meetingID']);
+				if($meeting['dayIndex'] == $dayIndex && $meeting['periodIndex'] == $periodIndex) return $meeting;
+			}
+
+			return NULL;
+		} else if(isset($_POST['name']) && isset($_POST['dayIndex']) && isset($_POST['periodIndex']) && isset($_POST['memberIDs'])) {
+			$name = $_POST['name'];
+			$dayIndex = $_POST['dayIndex'];
+			$periodIndex = $_POST['periodIndex'];
+			$memberIDs = $_POST['memberIDs'];
+
+			$this->insert("INSERT INTO Meeting (name, dayIndex, periodIndex) VALUES ('$name', $dayIndex, $periodIndex)");
+			$meetingIDArray = $this->select("SELECT meetingID FROM Meeting WHERE name = '$name' AND dayIndex = $dayIndex AND periodIndex = $periodIndex");
+			$meetingID = $meetingIDArray['meetingID'];
+			
+			foreach($memberIDs as $memberID) {
+				$this->insert("INSERT INTO MeetingToUser (meetingID, userID) VALUES ($meetingID, $memberID)");
+			}
 		} else {
 			return "Error: Invalid request";
 		}
