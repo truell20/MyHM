@@ -7,11 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import com.example.lucakoval.apposition.model.LocalDataHandler;
 
 import backend.Meeting;
+import backend.Period;
 
 interface MeetingCallback {
     void callback(Meeting meeting);
@@ -46,6 +49,20 @@ public class MeetingFragment extends Fragment {
         // Inflate the layout for this fragment
         final View fragmentView = inflater.inflate(R.layout.fragment_meeting, container, false);
 
+        // Populate Spinner with location options
+        ArrayAdapter<CharSequence> locationAdapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.locationsArray, android.R.layout.simple_spinner_item);
+        Spinner locationSpinner = (Spinner) fragmentView.findViewById(R.id.locationOptions);
+        locationSpinner.setAdapter(locationAdapter);
+
+        // Populate period Spinner with period options
+        String[] periodArray = new String[Period.numberOfPeriods];
+        for(int a = 0; a < periodArray.length; a++) periodArray[a] = ""+(a+1);
+        ArrayAdapter<String> periodAdapter = new ArrayAdapter<String>(fragmentView.getContext(), android.R.layout.simple_spinner_item, periodArray);
+        Spinner periodSpinner = (Spinner) fragmentView.findViewById(R.id.periodOptions);
+        periodSpinner.setAdapter(periodAdapter);
+
+        // Set listener for the submit button
         Button doneButton = (Button)fragmentView.findViewById(R.id.doneButton);
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
