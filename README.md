@@ -4,7 +4,7 @@ A scheduling and location app for the Horace Mann School. Includes an Android ap
 
 Users see their school schedule, can setup meetings with teachers and peers, can share their current location, and can see the locations of others.
 
-## TODO
+## To Do
 
 - Android
   - Implement meetings
