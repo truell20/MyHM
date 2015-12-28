@@ -104,7 +104,7 @@ public class Backend
         new QueryURLTask(new QueryURLCallback() {
             @Override
             public void onFinish(String result) {
-                System.out.println("Started first callback");
+                System.out.println("Started first callback: "+result);
                 try {
                     callback.callback(UserData.userDataFromJSON(new JSONObject(result)));
                 } catch (Exception e) {

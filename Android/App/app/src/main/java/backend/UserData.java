@@ -28,8 +28,8 @@ public class UserData implements java.io.Serializable {
         UserData data = new UserData();
         try {
             data.userID = json.getInt("userID");
-            data.firstName = json.getString("firstname");
-            data.lastName = json.getString("lastname");
+            data.firstName = json.getString("firstName");
+            data.lastName = json.getString("lastName");
             data.email = json.getString("email");
             data.password = json.getString("password");
         } catch (Exception e) {

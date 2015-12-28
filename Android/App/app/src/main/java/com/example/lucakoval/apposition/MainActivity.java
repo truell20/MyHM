@@ -46,10 +46,11 @@ public class MainActivity extends AppCompatActivity {
                 EditText passwordInput = (EditText) findViewById(R.id.passwordInput);
                 final String password = passwordInput.getText().toString();
 
-                Backend.getUserDataWithSignIn(email, password, new BackendCallback<UserData>() {
+                Backend.getUserDataWithSignIn("test", "test", new BackendCallback<UserData>() {
                     @Override
                     //it's "test" and "test"
                     public void callback(UserData result) {
+                        System.out.println("result: "+result);
                         if(result == null) {
                             findViewById(R.id.errorMessage).setVisibility(View.VISIBLE);
                         } else {

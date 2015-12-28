@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.lucakoval.apposition.model.LocalDataHandler;
 
@@ -58,12 +59,9 @@ public class MeetingFragment extends Fragment {
         Spinner locationSpinner = (Spinner) fragmentView.findViewById(R.id.locationOptions);
         locationSpinner.setAdapter(locationAdapter);
 
-        // Populate period Spinner with period options
-        String[] periodArray = new String[Period.numberOfPeriods];
-        for(int a = 0; a < periodArray.length; a++) periodArray[a] = ""+(a+1);
-        ArrayAdapter<String> periodAdapter = new ArrayAdapter<String>(fragmentView.getContext(), android.R.layout.simple_spinner_item, periodArray);
-        Spinner periodSpinner = (Spinner) fragmentView.findViewById(R.id.periodOptions);
-        periodSpinner.setAdapter(periodAdapter);
+        // Fill in meeting descriptor textview
+        TextView meetingDescriptor = (TextView)fragmentView.findViewById(R.id.meetingDescriptor);
+        meetingDescriptor.setText("Meeting during Period " + (periodIndex+1) + " and Day " + (dayIndex+1));
 
         // Set listener for the submit button
         Button doneButton = (Button)fragmentView.findViewById(R.id.doneButton);

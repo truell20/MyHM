@@ -247,19 +247,17 @@ class MyAPI extends API
 			}
 
 			return NULL;
-		} else if(isset($_POST['name']) && isset($_POST['dayIndex']) && isset($_POST['periodIndex']) && isset($_POST['memberIDs'])) {
+		} else if(isset($_POST['name']) && isset($_POST['dayIndex']) && isset($_POST['periodIndex'])) {
 			$name = $_POST['name'];
 			$dayIndex = $_POST['dayIndex'];
 			$periodIndex = $_POST['periodIndex'];
-			$memberIDs = $_POST['memberIDs'];
 
 			$this->insert("INSERT INTO Meeting (name, dayIndex, periodIndex) VALUES ('$name', $dayIndex, $periodIndex)");
 			$meetingIDArray = $this->select("SELECT meetingID FROM Meeting WHERE name = '$name' AND dayIndex = $dayIndex AND periodIndex = $periodIndex");
 			$meetingID = $meetingIDArray['meetingID'];
+			var_dump($memberIDs);
 			
-			foreach($memberIDs as $memberID) {
-				$this->insert("INSERT INTO MeetingToUser (meetingID, userID) VALUES ($meetingID, $memberID)");
-			}
+			$this->insert("INSERT INTO MeetingToUser (meetingID, userID) VALUES ($meetingID, 1)");
 		} else {
 			return "Error: Invalid request";
 		}

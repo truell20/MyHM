@@ -9,9 +9,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Create Meeting"
+        android:id="@+id/meetingDescriptor"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Name:"
         android:id="@+id/nameText"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/meetingDescriptor"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp" />
 
@@ -45,25 +55,6 @@
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Period:"
-        android:id="@+id/periodText"
-        android:layout_below="@+id/locationOptions"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
-
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:layout_below="@+id/periodText"
-        android:ems="10"
-        android:id="@+id/periodOptions"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
