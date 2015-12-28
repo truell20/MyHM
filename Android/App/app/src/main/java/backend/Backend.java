@@ -27,8 +27,8 @@ public class Backend
     public static void mainTest(String[] args) {
         System.out.println("\u000c");
 
-        //Backend.getUserDataWithSignIn("michael_truell@horacemann.org", "password", new BackendCallback<UserData>() {
-        Backend.getUserDataWithSignIn("a", "a", new BackendCallback<UserData>() {
+        Backend.getUserDataWithSignIn("michael_truell@horacemann.org", "password", new BackendCallback<UserData>() {
+        //Backend.getUserDataWithSignIn("a", "a", new BackendCallback<UserData>() {
             @Override
             public void callback(UserData result) {
                 System.out.println(result.userID);

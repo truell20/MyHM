@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
                 Backend.getUserDataWithSignIn(email, password, new BackendCallback<UserData>() {
                     @Override
+                    //it's "test" and "test"
                     public void callback(UserData result) {
                         if(result == null) {
                             findViewById(R.id.errorMessage).setVisibility(View.VISIBLE);
