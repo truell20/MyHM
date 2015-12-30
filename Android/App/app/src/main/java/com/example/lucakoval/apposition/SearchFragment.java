@@ -31,6 +31,8 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -39,10 +41,13 @@ public class SearchFragment extends Fragment {
         final View fragmentView = inflater.inflate(R.layout.fragment_search, container, false);
 
         Button searchButton = (Button)fragmentView.findViewById(R.id.searchButton);
+        final android.widget.SearchView searchView = (android.widget.SearchView) fragmentView.findViewById(R.id.searchInput);
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String searchQuery = ((EditText)fragmentView.findViewById(R.id.searchInput)).getText().toString();
+                //String searchQuery = ((EditText)fragmentView.findViewById(R.id.searchInput)).getText().toString();
+                //String searchQuery = (String) searchView.getQuery();
+                String searchQuery = String.valueOf(searchView.getQuery());
 
                 fragmentView.findViewById(R.id.searchContainer).setVisibility(View.INVISIBLE);
 
