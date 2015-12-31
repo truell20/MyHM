@@ -15,7 +15,20 @@
         android:id="@+id/searchButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="110dp" />
+        android:layout_marginBottom="110dp"
+
+        android:background="@drawable/buttonshape"
+
+        android:textColor="#000000"
+        android:textSize="15sp"
+
+        <!--
+        android:shadowColor="#A8A8A8"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowRadius="5"
+        -->
+        />
 
     <SearchView
         android:layout_width="wrap_content"
