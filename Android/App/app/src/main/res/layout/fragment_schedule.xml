@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/scheduleContainer"
-    tools:context="com.example.lucakoval.apposition.ScheduleFragment">
+    tools:context="com.example.lucakoval.apposition.ScheduleFragment"
+    android:background="#00D0FF">
 
     <LinearLayout
         android:orientation="vertical"
