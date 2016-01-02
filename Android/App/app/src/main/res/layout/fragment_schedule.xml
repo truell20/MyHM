@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textSize="24sp"
-            android:text="Day 1"/>
+            android:text="Day 1"
+            android:textColor="#FFFFFF" />
 
     </LinearLayout>
 

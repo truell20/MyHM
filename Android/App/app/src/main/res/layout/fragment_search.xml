@@ -20,7 +20,7 @@
 
         android:background="@drawable/buttonshape"
 
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="15sp"
         />
 

@@ -29,7 +29,8 @@
         android:id="@+id/emailText"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="54dp" />
+        android:layout_marginTop="54dp"
+        android:textColor="#FFFFFF" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -39,7 +40,8 @@
         android:id="@+id/emailInput"
         android:layout_marginTop="41dp"
         android:layout_below="@+id/emailText"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -48,7 +50,8 @@
         android:ems="10"
         android:id="@+id/passwordInput"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -58,7 +61,8 @@
         android:id="@+id/passwordText"
         android:layout_below="@+id/emailInput"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp" />
+        android:layout_marginTop="41dp"
+        android:textColor="#FFFFFF" />
 
     <Button
         android:layout_width="wrap_content"
@@ -71,7 +75,7 @@
 
         android:background="@drawable/buttonshape"
 
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="15sp"
 
         />

@@ -14,7 +14,8 @@
         android:id="@+id/meetingDescriptor"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,7 +25,8 @@
         android:id="@+id/nameText"
         android:layout_below="@+id/meetingDescriptor"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:textColor="#FFFFFF" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -34,7 +36,8 @@
         android:id="@+id/nameInput"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/nameText"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -44,7 +47,8 @@
         android:id="@+id/locationText"
         android:layout_below="@+id/nameInput"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:textColor="#FFFFFF" />
 
     <Spinner
         android:layout_width="wrap_content"
@@ -54,7 +58,8 @@
         android:ems="10"
         android:id="@+id/locationOptions"
         android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#FFFFFF" />
 
 
     <Button
@@ -68,7 +73,7 @@
 
         android:background="@drawable/buttonshape"
 
-        android:textColor="#000000"
+        android:textColor="#FFFFFF"
         android:textSize="15sp"
 
         />
