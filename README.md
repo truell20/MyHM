@@ -1,21 +1,24 @@
 # ApPosition
 
-**ApPosition is still under development.** A scheduling and location app for the Horace Mann School. Includes an Android app, a Java API wrapper, and a RESTful API. Work will begin on an iOS app when the Android app is completed. 
+**ApPosition is still under development.** 
 
-Users see their school schedule, can setup meetings with teachers and peers, can share their current location, and can see the locations of others.
+ApPosition is a scheduling and location app for the Horace Mann School. ApPosition uses the Ionic Framework and is written in HTML5 and AngularJs. On the bakcend, the app utilizes a RESTful API written in PHP using a MYSQL database running on an Apache Server.
+
+Users see their schedule, can setup meetings with teachers and peers, can share their current location, and can see the locations of others.
 
 ## To Do
 
-- Android
-  - Implement meetings
-    - Creation of meetings fragment
-      - Each meeting has a name, a period, and collaborators
-      - Notify a user through push notifications when someone creates a meeting with their name
-    - Integrate meetings with the backend
-    - Display meetings on the personal schedule tab
-  - Search tab
-    - Build a fragment that allows the user to search for other users by name
-    - A user may be clicked on and their schedule will show up
-    - A user may be favorited d by clicking on a star on the action bar of the user's schedule fragment 
+- Write backend in JS
+- Implement Home Tab (share current location)
+- Implement meetings
+  - Creation of meetings fragment
+    - Each meeting has a name, a period, and collaborators
+    - Notify a user through push notifications when someone creates a meeting with their name
+  - Integrate meetings with the backend
+  - Display meetings schedule
+- Search
+  - User can search for other users by name
+  - A user may be clicked on and their schedule will show up
+  - Allow for the favoriting of users. They show up on the search tab before anything is searched. 
 - Future Features
   - Allow for the requesting of another users location. A request would send a push notification to that user.
