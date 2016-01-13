@@ -313,3 +313,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+node_modules/
+temp/
+*.DS_Store
+*.log
+*.swp
