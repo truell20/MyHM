@@ -6,6 +6,8 @@ ApPosition is a scheduling and location app for the Horace Mann School. ApPositi
 
 Users see their schedule, can setup meetings with teachers and peers, can share their current location, and can see the locations of others.
 
+ApPosition was made by [Michael Truell](https://github.com/truell20), [Josh Gruenstein](https://github.com/joshuagruenstein), and [Luca Koval](https://github.com/G4Cool).
+
 ## To Do
 
 - Write backend in JS
