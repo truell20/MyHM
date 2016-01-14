@@ -45,6 +45,9 @@ angular.module('ApPosition.controllers', [])
 })
 
 .controller('LoginCtrl', function($scope, $cordovaBarcodeScanner,$location) {
+	$scope.skipLogin = function() {
+		$location.path('/tab/home');
+	};
 
 	$scope.scanBarcode = function() {
 		$cordovaBarcodeScanner.scan().then(function(imageData) {
