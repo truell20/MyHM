@@ -319,3 +319,5 @@ temp/
 *.DS_Store
 *.log
 *.swp
+
+config.php

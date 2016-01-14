@@ -14,13 +14,25 @@ class MyAPI extends API
 		parent::__construct($request);
 	}
 
-	// Initializes and returns a mysqli object that represents our mysql database
+	private function sanitizeHTTPParameters() {
+		foreach ($_GET as $key => $value) {
+			$_GET[$key] = escapeshellcmd($this->mysqli->real_escape_string($value));
+		}
+		foreach ($_POST as $key => $value) {
+			$_POST[$key] = escapeshellcmd($this->mysqli->real_escape_string($value));
+		}
+	}
+
+	private function encryptPassword($password) {
+		return $this->mysqli->real_escape_string(crypt($password, $this->config['salt']));
+	}
+	
 	private function initDB() {
-		$this->mysqli = new mysqli("ApPosition.db.12061709.hostedresource.com", 
-			"ApPosition", 
-			"Fustercluck2!", 
-			"ApPosition");
-		
+		$this->mysqli = new mysqli($this->config['hostname'], 
+			$this->config['username'], 
+			$this->config['password'], 
+			$this->config['databaseName']);
+
 		if (mysqli_connect_errno()) { 
 			echo "<br><br>There seems to be a problem with our database. Reload the page or try again later.";
 			exit(); 
@@ -110,71 +122,25 @@ class MyAPI extends API
 		return $resultArray;
 	}
 
-	private function sqlFromArguments($arguments, $tableName, $whereCondition) {
-		// This will hold the names of the columns that the caller has given us values for
-		$availableColumns = array();
-		$rowsResult = mysqli_query($this->mysqli, "SHOW COLUMNS FROM User");
-		while ($row = mysqli_fetch_assoc($rowsResult)) {
-			if(isset($putVars[$row['Field']])) {
-				array_push($availableColumns, $row['Field']);
-			}
-		}
-
-		// Building the query based on the items the caller has given us
-		$query = "UPDATE $tableName SET ";
-		for($a = 0; $a < count($availableColumns); $a++) {
-			$columnName = $availableColumns[$a];
-			if($a == count($availableColumns) - 1) $query .= "$columnName = '$putVars[$columnName]'";
-			else $query .= "$columnName = '$putVars[$columnName]', ";
-		}
-		$query .= " ".$whereCondition;
-
-		return $query;
-	}
-
 	//--------------------- API ENDPOINTS ------------------------\\
 
 	// Endpoint associated with a users credentials (everything in the User table; i.e. name, email, firstname, etc.)
-	protected function credentials() {
-		if ($this->method == 'GET') {
-			$resultArray = NULL;
+	protected function user() {
+		if(isset($_GET['userID']) && isset($_GET['password'])) {
+			$userID = $_GET['userID'];
+			$password = $_GET['password'];
 
-			if(isset($_GET['userID'])) {
-				$userID = $_GET['userID'];
+			return $this->removeLocationIfExpired($this->select("SELECT * FROM User WHERE userID = $userID and password = '$password'"));
+		} else if(isset($_GET['email']) && isset($_GET['password'])) {
+			$email = $this->mysqli->escape_string($_GET['email']);
+			$password = $this->mysqli->escape_string($_GET['password']);
 
-				return $this->removeLocationIfExpired($this->select("SELECT * FROM User WHERE userID = $userID"));
-			} else if(isset($_GET['email']) && isset($_GET['password'])) {
-				$email = $this->mysqli->escape_string($_GET['email']);
-				$password = $this->mysqli->escape_string($_GET['password']);
-
-				return $this->removeLocationIfExpired($this->select("SELECT * FROM User WHERE email = '$email' AND password = '$password'"));
-			} else if(isset($_GET['searchTerm'])) {
-				$searchTerm = $_GET['searchTerm'];
-				return $this->selectMultiple("SELECT userID, firstName, lastName, email FROM User WHERE 
-					LCASE(firstName) LIKE LCASE('%$searchTerm%') 
-					OR LCASE(lastName) LIKE LCASE('%$searchTerm%')");
-			} else {
-				return "Error: Invalid request";
-			}
-		} else if($this->method == 'PUT'){
-			parse_str($this->file, $putVars);
-			
-			// If there is no userID
-			if(!isset($putVars['userID'])) {
-				return "Error: Invalid request";
-			}
-
-			$userID = $putVars['userID'];
-			$key = $putVars['key'];
-
-			if($this->isKeyValid($key, $userID) == False)  return "Invalid key";
-
-			unset($array['userID']);
-			$query = $this->sqlFromArguments($putVars, "User", "WHERE userID = $userID");
-
-			mysqli_query($this->mysqli, $query);
-
-			return "Success";
+			return $this->removeLocationIfExpired($this->select("SELECT * FROM User WHERE email = '$email' AND password = '$password'"));
+		} else if(isset($_GET['searchTerm'])) {
+			$searchTerm = $_GET['searchTerm'];
+			return $this->selectMultiple("SELECT userID, firstName, lastName, email FROM User WHERE 
+				LCASE(firstName) LIKE LCASE('%$searchTerm%') 
+				OR LCASE(lastName) LIKE LCASE('%$searchTerm%')");
 		} else {
 			return "Error: Invalid request";
 		}
@@ -183,7 +149,7 @@ class MyAPI extends API
 
 	// Endpoint associated with a User's classes
 	protected function classes() {
-		if ($this->method == 'GET' && isset($_GET['userID']) && isset($_GET['day'])) {
+		if (isset($_GET['userID']) && isset($_GET['day'])) {
 			$userID = $_GET['userID'];
 			$day = $_GET['day'];
 
@@ -195,29 +161,7 @@ class MyAPI extends API
 
 	// Endpoint associated with a User's meetings
 	protected function meetings() {
-		/*// Get meetings with date and userID
-		if (isset($_GET['userID']) && isset($_GET['date'])) {
-			$userID = $_GET['userID'];
-			$date = $_GET['date'];
-
-			$sql = "SELECT meetingID FROM MeetingToUser WHERE userID = $userID";
-			$meetingIDResult = mysqli_query($this->mysqli, $sql);
-
-			$returnArray = array();
-
-			while($holder = mysqli_fetch_array($meetingIDResult, MYSQLI_ASSOC)) {
-				$meetingID = $holder['meetingID'];
-				$meeting = $this->getMeetingWithID($meetingID);
-
-				/// Include the meeting if it is on the specified date
-				$beginningDateTime = date_create_from_format("Y-m-d H:i:s", $resultArray['beginning']);
-				if(strcmp($date, $beginningDateTime->format("Y-m-d")) == 0) {
-					array_push($returnArray, $resultArray);
-				}
-			}  
-
-			return $returnArray;
-		} else*/ if(isset($_GET['meetingID'])) {
+		if(isset($_GET['meetingID'])) {
 			$meetingID = $_GET['meetingID'];
 
 			return $this->getMeetingWithID($meetingID);
