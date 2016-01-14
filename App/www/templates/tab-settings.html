@@ -1,6 +1,23 @@
 <ion-view view-title="Settings">
 	<ion-content class="padding">
-		<h2>Settings</h2>
-		<p>woo</p>
+
+		<h2>Friends</h2>
+
+		<div class="button-bar bar-positive">
+			<button class="button" ng-click="addFriendPrompt();">Add</button>
+			<button class="button" ng-click="data.showDelete = !data.showDelete;">Delete</button>
+		</div><br />
+
+		<ion-list show-delete="data.showDelete">
+			<ion-item ng-repeat="friend in friends" item="friend" href="#/person/{{friend.id}}" class="item-remove-animate">
+				{{ friend.name }}
+				<ion-delete-button class="ion-minus-circled" ng-click="deleteFriend(friend)">
+				</ion-delete-button>
+			</ion-item>
+		</ion-list>
+
+		<button class="button button-block button-outline button-positive">
+  			Sign Out
+		</button>
 	</ion-content>
 </ion-view>
