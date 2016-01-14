@@ -4,7 +4,7 @@ angular.module('ApPosition.controllers', [])
 
 .controller('SearchCtrl', function($scope) {})
 
-.controller('SettingsCtrl', function($scope,$ionicPopup) {
+.controller('SettingsCtrl', function($scope,$ionicPopup,$location) {
 	$scope.data = {
 		showDelete: false
 	};
@@ -33,6 +33,10 @@ angular.module('ApPosition.controllers', [])
 	   });
 	};
 
+	$scope.logout = function() {
+		$location.path('/login');
+	};
+
 	$scope.friends = [
 		{ name: 'Michael Truell' },
 		{ name: 'Luca Koval' },
@@ -40,15 +44,15 @@ angular.module('ApPosition.controllers', [])
 	];
 })
 
-.controller('LoginCtrl', function($scope, $cordovaBarcodeScanner) {
+.controller('LoginCtrl', function($scope, $cordovaBarcodeScanner,$location) {
 
 	$scope.scanBarcode = function() {
 		$cordovaBarcodeScanner.scan().then(function(imageData) {
+			if (imageData.cancelled) return;
 			alert(imageData.text);
-			console.log("Barcode Format -> " + imageData.format);
-			console.log("Cancelled -> " + imageData.cancelled);
+			$location.path('/tab/home');
 		}, function(error) {
-			console.log("An error happened -> " + error);
+			alert("An error happened -> " + error);
 		});
 	};
 

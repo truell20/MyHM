@@ -4,7 +4,7 @@
 		<h2>Friends</h2>
 
 		<div class="button-bar bar-positive">
-			<button class="button" ng-click="addFriendPrompt();">Add</button>
+			<button class="button" ng-click="data.showDelete = false; addFriendPrompt();">Add</button>
 			<button class="button" ng-click="data.showDelete = !data.showDelete;">Delete</button>
 		</div><br />
 
@@ -16,7 +16,7 @@
 			</ion-item>
 		</ion-list>
 
-		<button class="button button-block button-outline button-positive">
+		<button class="button button-block button-outline button-positive" ng-click="logout()">
   			Sign Out
 		</button>
 	</ion-content>
