@@ -29,6 +29,12 @@ angular.module('ApPosition', ['ionic', 'ngCordova', 'ApPosition.controllers', 'A
 		controller: 'LoginCtrl'
 	})
 
+	.state('frees', {
+		url: '/frees',
+		templateUrl: 'templates/frees.html',
+		controller: 'FreesCtrl'
+	})
+
 	.state('tab', {
 		url: '/tab',
 		abstract: true,
