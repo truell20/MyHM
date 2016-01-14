@@ -13,7 +13,7 @@ ApPosition was made by [Michael Truell](https://github.com/truell20), [Josh Grue
 - Write backend in JS
 - Implement Home Tab (share current location)
 - Implement meetings
-  - Creation of meetings fragment
+  - Creation of meetings
     - Each meeting has a name, a period, and collaborators
     - Notify a user through push notifications when someone creates a meeting with their name
   - Integrate meetings with the backend
