@@ -1,4 +1,4 @@
-angular.module('ApPosition', ['ionic', 'ApPosition.controllers', 'ApPosition.services'])
+angular.module('ApPosition', ['ionic', 'ngCordova', 'ApPosition.controllers', 'ApPosition.services'])
 
 .run(function($ionicPlatform) {
 	$ionicPlatform.ready(function() {
@@ -22,6 +22,12 @@ angular.module('ApPosition', ['ionic', 'ApPosition.controllers', 'ApPosition.ser
 	// Set up the various states which the app can be in.
 	// Each state's controller can be found in controllers.js
 	$stateProvider
+
+	.state('login', {
+		url: '/login',
+		templateUrl: 'templates/login.html',
+		controller: 'LoginCtrl'
+	})
 
 	.state('tab', {
 		url: '/tab',
@@ -60,6 +66,6 @@ angular.module('ApPosition', ['ionic', 'ApPosition.controllers', 'ApPosition.ser
 	});
 
 	// if none of the above states are matched, use this as the fallback
-	$urlRouterProvider.otherwise('/tab/home');
+	$urlRouterProvider.otherwise('/login');
 
 });
