@@ -123,7 +123,6 @@ class MyAPI extends API
 	}
 
 	//--------------------- API ENDPOINTS ------------------------\\
-
 	// Endpoint associated with a users credentials (everything in the User table; i.e. name, email, firstname, etc.)
 	protected function user() {
 		if(isset($_GET['userID']) && isset($_GET['password'])) {
@@ -145,8 +144,7 @@ class MyAPI extends API
 			return "Error: Invalid request";
 		}
 	}
-
-
+	
 	// Endpoint associated with a User's classes
 	protected function classes() {
 		if (isset($_GET['userID']) && isset($_GET['day'])) {
@@ -162,46 +160,16 @@ class MyAPI extends API
 	// Endpoint associated with a User's meetings
 	protected function meetings() {
 		if(isset($_GET['meetingID'])) {
-			$meetingID = $_GET['meetingID'];
-
-			return $this->getMeetingWithID($meetingID);
-		} else if(isset($_GET['userID']) && isset($_GET['dayIndex'])) {
+			return $this->getMeetingWithID($_GET['meetingID']);
+		} else if(isset($_GET['userID'])) {
 			$userID = $_GET['userID'];
-			$dayIndex = $_GET['dayIndex'];
 
 			$meetingsForUser = $this->selectMultiple("SELECT meetingID FROM MeetingToUser WHERE userID = $userID");
 
 			$returnMeetings = array();
-			foreach($meetingsForUser as $meetingIDArray) {
-				$meeting = $this->getMeetingWithID($meetingIDArray['meetingID']);
-				if($meeting['dayIndex'] == $dayIndex) array_push($returnMeetings, $meeting);
-			}
+			foreach($meetingsForUser as $meetingsForUser) $meeting = $this->getMeetingWithID($meetingsForUser['meetingID']);
 
 			return $returnMeetings;
-		} else if(isset($_GET['userID']) && isset($_GET['dayIndex']) && isset($_GET['periodIndex'])) {
-			$userID = $_GET['userID'];
-			$dayIndex = $_GET['dayIndex'];
-			$periodIndex = $_GET['periodIndex'];
-
-			$meetingsForUser = $this->selectMultiple("SELECT meetingID FROM MeetingToUser WHERE userID = $userID");
-
-			foreach($meetingsForUser as $meetingIDArray) {
-				$meeting = $this->getMeetingWithID($meetingIDArray['meetingID']);
-				if($meeting['dayIndex'] == $dayIndex && $meeting['periodIndex'] == $periodIndex) return $meeting;
-			}
-
-			return NULL;
-		} else if(isset($_POST['name']) && isset($_POST['dayIndex']) && isset($_POST['periodIndex'])) {
-			$name = $_POST['name'];
-			$dayIndex = $_POST['dayIndex'];
-			$periodIndex = $_POST['periodIndex'];
-
-			$this->insert("INSERT INTO Meeting (name, dayIndex, periodIndex) VALUES ('$name', $dayIndex, $periodIndex)");
-			$meetingIDArray = $this->select("SELECT meetingID FROM Meeting WHERE name = '$name' AND dayIndex = $dayIndex AND periodIndex = $periodIndex");
-			$meetingID = $meetingIDArray['meetingID'];
-			var_dump($memberIDs);
-			
-			$this->insert("INSERT INTO MeetingToUser (meetingID, userID) VALUES ($meetingID, 1)");
 		} else {
 			return "Error: Invalid request";
 		}
