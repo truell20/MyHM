@@ -1,11 +1,11 @@
 angular.module('ApPosition.controllers', [])
 
-.controller('HomeCtrl', function($scope) {})
+.controller('MeetingsCtrl', function($scope) {
+	
+})
 
-.controller('SearchCtrl', function($scope,$location) {
-	$scope.chooseFrees = function(id) {
-		$location.path('/frees');
-	}
+.controller('HomeCtrl', function($scope) {
+
 })
 
 .controller('SettingsCtrl', function($scope,$ionicPopup,$location) {
@@ -62,9 +62,5 @@ angular.module('ApPosition.controllers', [])
 			alert("An error happened -> " + error);
 		});
 	};
-
-})
-
-.controller('FreesCtrl', function($scope) {
 
 });

@@ -29,12 +29,6 @@ angular.module('ApPosition', ['ionic', 'ngCordova', 'ApPosition.controllers', 'A
 		controller: 'LoginCtrl'
 	})
 
-	.state('frees', {
-		url: '/frees',
-		templateUrl: 'templates/frees.html',
-		controller: 'FreesCtrl'
-	})
-
 	.state('tab', {
 		url: '/tab',
 		abstract: true,
@@ -51,12 +45,12 @@ angular.module('ApPosition', ['ionic', 'ngCordova', 'ApPosition.controllers', 'A
 		}
 	})
 
-	.state('tab.search', {
-		url: '/search',
+	.state('tab.meetings', {
+		url: '/meetings',
 		views: {
-			'tab-search': {
-				templateUrl: 'templates/tab-search.html',
-				controller: 'SearchCtrl'
+			'tab-meetings': {
+				templateUrl: 'templates/tab-meetings.html',
+				controller: 'MeetingsCtrl'
 			}
 		}
 	})
