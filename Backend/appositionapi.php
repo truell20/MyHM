@@ -3,14 +3,14 @@
 require_once 'API.class.php';
 class MyAPI extends API
 {
-	// Holds the end times of each period in string form
-	public $periodEndings = array("09:15:00", "13:15:00");
-
 	// The database
 	private $mysqli = NULL;
 
 	public function __construct($request, $origin) {
+		$this->config = include('config.php');
 		$this->initDB();
+		$this->sanitizeHTTPParameters();
+
 		parent::__construct($request);
 	}
 
@@ -26,16 +26,16 @@ class MyAPI extends API
 	private function encryptPassword($password) {
 		return $this->mysqli->real_escape_string(crypt($password, $this->config['salt']));
 	}
-	
-	private function initDB() {
-		$this->mysqli = new mysqli($this->config['hostname'], 
-			$this->config['username'], 
-			$this->config['password'], 
-			$this->config['databaseName']);
 
-		if (mysqli_connect_errno()) { 
+	private function initDB() {
+		$this->mysqli = new mysqli($this->config['hostname'],
+		$this->config['username'],
+		$this->config['password'],
+		$this->config['databaseName']);
+
+		if (mysqli_connect_errno()) {
 			echo "<br><br>There seems to be a problem with our database. Reload the page or try again later.";
-			exit(); 
+			exit();
 		}
 	}
 
@@ -59,119 +59,66 @@ class MyAPI extends API
 		mysqli_query($this->mysqli, $sql);
 	}
 
-	// Determines if a User's current location has expired. Is true if the current location was updated during a different period
-	private function isCurrentLocationExpired($currentDateTime, $lastTimeLocationUpdated) {
-		if($currentDateTime->getTimestamp() - $lastTimeLocationUpdated->getTimestamp() >= 60*45) return True;
-		if($currentDateTime->diff($lastTimeLocationUpdated)->days > 0) return True;
+	// Returns an associative array with all of the information about a meeting
+	// Contains more than just the information in the meeting table (ex. includes the participant ids)
+	private function getFullMeeting($meetingID) {
+		$meetingArray = $this->select("SELECT * FROM Meeting WHERE meetingID = $meetingID");
 
-		$isExpired = False;
-		foreach($this->periodEndings as $periodEnd) {
-			$periodEndDateTime = date_create_from_format("Y-m-d H:i:s", $currentDateTime->format('Y-m-d')." ".$periodEnd);
-			
-			if($currentDateTime->getTimestamp() - $periodEndDateTime->getTimestamp() > 0 
-				&& $lastTimeLocationUpdated->getTimestamp() - $periodEndDateTime->getTimestamp() < 0) {
-				
-				$isExpired = True;
-				break;
-			}
-		}
-
-		return $isExpired;
-	}
-
-
-	private function isKeyValid($key, $userID) {
-		$sql = "SELECT password FROM User WHERE userID = $userID";
-		$resultArray = $this->select($sql);
-
-		if(strcmp($resultArray['password'], $key) == 0) return True;
-		else return False;
-	}
-
-	private function removeLocationIfExpired($resultArray) {
-		$userID = $resultArray['userID'];
-
-		$lastTimeLocationUpdated = date_create_from_format("Y-m-d H:i:s", $resultArray['lastTimeLocationUpdated']);
-		if($lastTimeLocationUpdated == false) return;
-
-		$currentDateTime = new DateTime();
-
-		if($this->isCurrentLocationExpired($currentDateTime, $lastTimeLocationUpdated) == True) {
-			mysqli_query($this->mysqli,"UPDATE User SET currentLocation = '' WHERE userID = $userID");
-			unset($resultArray['currentLocation']);
-		}
-
-		return $resultArray;
-	}
-
-	/// Returns an associated array with a meetings credentials
-	private function getMeetingWithID($meetingID) {
-		$sql = "SELECT * FROM Meeting WHERE meetingID = $meetingID";
-		$meetingResult = mysqli_query($this->mysqli, $sql);
-		$resultArray = mysqli_fetch_array($meetingResult, MYSQLI_ASSOC);
-
-		/// Get members of meeting
-		$sql = "SELECT * FROM MeetingToUser WHERE meetingID = $meetingID";
-		$userIDRes = mysqli_query($this->mysqli, $sql);
-		$userIDs = array();
-		while($userIDArray = mysqli_fetch_array($userIDRes, MYSQLI_ASSOC)) {
-			array_push($userIDs, $userIDArray['userID']);
-		}
+		// Add userIDs of participants to array
+		$userIDs = $this->selectMultiple("SELECT * FROM MeetingToUser WHERE meetingID = $meetingID");
 		$resultArray['members'] = $userIDs;
 
 		return $resultArray;
 	}
 
 	//--------------------- API ENDPOINTS ------------------------\\
-	// Endpoint associated with a users credentials (everything in the User table; i.e. name, email, firstname, etc.)
 	protected function user() {
 		if(isset($_GET['userID']) && isset($_GET['password'])) {
 			$userID = $_GET['userID'];
 			$password = $_GET['password'];
 
-			return $this->removeLocationIfExpired($this->select("SELECT * FROM User WHERE userID = $userID and password = '$password'"));
+			return $this->select("SELECT * FROM User WHERE userID = $userID and password = '$password'");
 		} else if(isset($_GET['email']) && isset($_GET['password'])) {
-			$email = $this->mysqli->escape_string($_GET['email']);
-			$password = $this->mysqli->escape_string($_GET['password']);
+			$email = $_GET['email'];
+			$password = $_GET['password'];
 
-			return $this->removeLocationIfExpired($this->select("SELECT * FROM User WHERE email = '$email' AND password = '$password'"));
+			return $this->select("SELECT * FROM User WHERE email = '$email' AND password = '$password'");
 		} else if(isset($_GET['searchTerm'])) {
 			$searchTerm = $_GET['searchTerm'];
-			return $this->selectMultiple("SELECT userID, firstName, lastName, email FROM User WHERE 
-				LCASE(firstName) LIKE LCASE('%$searchTerm%') 
+			return $this->selectMultiple("SELECT userID, firstName, lastName, email FROM User WHERE
+				LCASE(firstName) LIKE LCASE('%$searchTerm%')
 				OR LCASE(lastName) LIKE LCASE('%$searchTerm%')");
 		} else {
-			return "Error: Invalid request";
+			return NULL;
 		}
 	}
-	
-	// Endpoint associated with a User's classes
-	protected function classes() {
-		if (isset($_GET['userID']) && isset($_GET['day'])) {
+
+	protected function schedule() {
+		if (isset($_GET['userID'])) {
 			$userID = $_GET['userID'];
-			$day = $_GET['day'];
 
-			return $this->selectMultiple("SELECT period, name FROM Period WHERE userID = $userID AND day = $day");
+			return $this->selectMultiple("SELECT * FROM Period WHERE userID = $userID");
 		} else {
-			return "Error: Invalid request";
+			return NULL;
 		}
 	}
 
-	// Endpoint associated with a User's meetings
-	protected function meetings() {
+	protected function meeting() {
 		if(isset($_GET['meetingID'])) {
-			return $this->getMeetingWithID($_GET['meetingID']);
+			return $this->getFullMeeting($_GET['meetingID']);
 		} else if(isset($_GET['userID'])) {
 			$userID = $_GET['userID'];
 
 			$meetingsForUser = $this->selectMultiple("SELECT meetingID FROM MeetingToUser WHERE userID = $userID");
 
-			$returnMeetings = array();
-			foreach($meetingsForUser as $meetingsForUser) $meeting = $this->getMeetingWithID($meetingsForUser['meetingID']);
+			$returnArray = array();
+			foreach($meetingsForUser as $meetingArray) {
+				array_push($returnArray, $this->getFullMeeting($meetingArray['meetingID']));
+			}
 
-			return $returnMeetings;
+			return $returnArray;
 		} else {
-			return "Error: Invalid request";
+			return NULL;
 		}
 	}
  }
