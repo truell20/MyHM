@@ -4,6 +4,10 @@ angular.module('ApPosition.controllers', [])
 	
 })
 
+.controller('MakeMeetingCtrl', function($scope) {
+	
+})
+
 .controller('HomeCtrl', function($scope) {
 
 })

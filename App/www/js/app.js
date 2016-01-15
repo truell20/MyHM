@@ -55,6 +55,16 @@ angular.module('ApPosition', ['ionic', 'ngCordova', 'ApPosition.controllers', 'A
 		}
 	})
 
+	.state('tab.meetings/make-meeting', {
+		url: "/make-meeting",
+		views: {
+			'tab-meetings': {
+				templateUrl: 'templates/tab-make-meeting.html',
+				controller: 'MakeMeetingCtrl'
+			}
+		}
+	})
+
 	.state('tab.settings', {
 		url: '/settings',
 		views: {
