@@ -66,9 +66,9 @@ class MyAPI extends API
 
 		// Add userIDs of participants to array
 		$userIDs = $this->selectMultiple("SELECT * FROM MeetingToUser WHERE meetingID = $meetingID");
-		$resultArray['members'] = $userIDs;
+		$meetingArray['members'] = $userIDs;
 
-		return $resultArray;
+		return $meetingArray;
 	}
 
 	//--------------------- API ENDPOINTS ------------------------\\
