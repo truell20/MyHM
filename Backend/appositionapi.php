@@ -72,6 +72,29 @@ class MyAPI extends API
 	}
 
 	//--------------------- API ENDPOINTS ------------------------\\
+	protected function session() {
+		session_start();
+		
+		if($this->method == 'GET') {
+			if(count($_SESSION) > 0) return $_SESSION;
+			else return NULL;
+		} else if(isset($_POST['email']) & isset($_POST['password'])) {
+			$email = $_POST['email'];
+			$password = $this->encryptPassword($_POST['password']);
+			$userArray = $this->select("SELECT * FROM User WHERE email = '$email' AND password = '$password'");
+			$_SESSION = $userArray;
+		} else if(isset($_POST['userID']) & isset($_POST['password'])) {
+			$userID= $_POST['userID'];
+			$password = $this->encryptPassword($_POST['password']);
+			$userArray = $this->select("SELECT * FROM User WHERE userID = '$userID' AND password = '$password'");
+			$_SESSION = $userArray;
+		} else if($this->method == 'DELETE') {
+			session_destroy();
+		} else {
+			return NULL;
+		}
+	}
+
 	protected function user() {
 		if(isset($_GET['userID']) && isset($_GET['password'])) {
 			$userID = $_GET['userID'];

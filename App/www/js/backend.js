@@ -1,5 +1,13 @@
 var url = "http://localhost:80/ApPosition/Backend/"
 
+function getSession() {
+	return $.ajax({
+		url: url+"session",
+		async: false,
+		method: "GET"
+	}).responseJSON;
+}
+
 function getUser(userID, email, password) {
 	var result = null;
 	if(userID != null) {
@@ -55,4 +63,24 @@ function getMeeting(meetingID) {
 		method: "GET",
 		data: {meetingID: meetingID}
 	}).responseJSON;
+}
+
+function storeUserSession(userID, email, password, async) {
+	if(userID != null && password != null) {
+		var result = $.ajax({
+			url: url+"session", 
+			async: async,
+			method: "POST",
+			data: {userID: userID, password: password}
+		});
+	} else if(email != null && password != null) {
+		var result = $.ajax({
+			url: url+"session", 
+			async: async,
+			method: "POST",
+			data: {email: email, password: password}
+		});
+	} else {
+
+	}
 }
