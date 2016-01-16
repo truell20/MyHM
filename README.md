@@ -10,17 +10,11 @@ MyHM was made by [Michael Truell](https://github.com/truell20), [Josh Gruenstein
 
 ## To Do
 
-- Write backend in JS
-- Implement Home Tab (share current location)
 - Implement meetings
   - Creation of meetings
     - Each meeting has a name, a period, and collaborators
     - Notify a user through push notifications when someone creates a meeting with their name
   - Integrate meetings with the backend
   - Display meetings schedule
-- Search
-  - User can search for other users by name
-  - A user may be clicked on and their schedule will show up
-  - Allow for the favoriting of users. They show up on the search tab before anything is searched. 
-- Future Features
-  - Allow for the requesting of another users location. A request would send a push notification to that user.
+- Push notifications
+- Add in frontend JS
