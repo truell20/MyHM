@@ -1,12 +1,4 @@
-var url = "http://localhost:80/ApPosition/Backend/"
-
-function getSession() {
-	return $.ajax({
-		url: url+"session",
-		async: false,
-		method: "GET"
-	}).responseJSON;
-}
+var url = "http://localhost:80/MyHM/Backend/"
 
 function getUser(userID, email, password) {
 	var result = null;
@@ -78,9 +70,15 @@ function storeUserSession(userID, email, password, async) {
 			url: url+"session", 
 			async: async,
 			method: "POST",
-			data: {email: email, password: password}
+			data: {email: email, password: password},
+			error: function(xhr, status, error) {
+				console.log(xhr.responseText);
+			}
 		});
-	} else {
-
 	}
+}
+
+function locallyStoreInfo(userID) {
+	window.localStorage['meetings'] = JSON.stringify(getUserMeetings(userID))
+	window.localStorage['schedule'] = JSON.stringify(getSchedule(userID))
 }

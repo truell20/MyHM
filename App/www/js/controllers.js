@@ -9,7 +9,7 @@ angular.module('ApPosition.controllers', [])
 })
 
 .controller('HomeCtrl', function($scope) {
-
+	console.log(JSON.parse(window.localStorage['user']))
 })
 
 .controller('SettingsCtrl', function($scope,$ionicPopup,$location) {
@@ -54,12 +54,20 @@ angular.module('ApPosition.controllers', [])
 
 .controller('LoginCtrl', function($scope, $cordovaBarcodeScanner,$location) {
 	$scope.skipLogin = function() {
+		window.localStorage['user'] = JSON.stringify({
+			email: "michael_truell@horacemann.org", 
+			firstName: "Michael", 
+			lastName: "Truell",
+			password: "sa3tHJ3/KuYvI"
+		});
+
 		$location.path('/tab/home');
 	};
 
 	$scope.scanBarcode = function() {
 		$cordovaBarcodeScanner.scan().then(function(imageData) {
 			if (imageData.cancelled) return;
+
 			alert(imageData.text);
 			$location.path('/tab/home');
 		}, function(error) {
