@@ -3,7 +3,7 @@
 		<div class="list list-inset">
 			<label class="item item-input">
 				<i class="icon ion-search placeholder-icon"></i>
-				<input placeholder="Search" type="text">
+				<input ng-model="query" placeholder="Search" type="text">
 			</label>
 		</div>
 
@@ -12,43 +12,22 @@
 				Teachers
 			</div>
 
-			<div class="item item-checkbox">
+			<div ng-repeat="teacher in teachers | filter:query" class="item item-checkbox">
 				<label class="checkbox">
 					<input type="checkbox">
 				</label>
-				Fred Levy
-			</div>
-
-			<div class="item item-checkbox">
-				<label class="checkbox">
-					<input type="checkbox">
-				</label>
-				Danah Screen
-			</div>
-
-			<div class="item item-checkbox">
-				<label class="checkbox">
-					<input type="checkbox">
-				</label>
-				Jason Torres
+				{{ teacher.name }}
 			</div>
 
 			<div class="item item-divider">
 				Students
     		</div>
 
-			<div class="item item-checkbox">
+			<div ng-repeat="student in students | filter:query" class="item item-checkbox">
 				<label class="checkbox">
 					<input type="checkbox">
 				</label>
-				Michael Truell
-			</div>
-
-			<div class="item item-checkbox">
-				<label class="checkbox">
-					<input type="checkbox">
-				</label>
-				Luca Koval
+				{{ student.name }}
 			</div>
 		</div>
 
@@ -58,16 +37,10 @@
 				Shared Frees
 			</div>
 
-			<a href="#" class="item item-button-right">
+			<a ng-repeat="free in sharedFrees(teachers.concat(students))" href="#" class="item item-button-right">
 				<button class="button button-positive">Request</button>
-				G Period, Monday
+				{{ free.toString() }}
 			</a>
-
-			<a href="#" class="item item-button-right">
-				<button class="button button-positive">Request</button>
-				C Period, Thurday
-			</a>
-
 		</div>
 
 	</ion-content>
