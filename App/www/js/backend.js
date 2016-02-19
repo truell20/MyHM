@@ -22,6 +22,7 @@ function getSchedule(userID) {
 		url:url+"schedule",
 		data: {userID: userID}
 	});
+}
 
 function getUserMeetings(userID) {
 	return $http({
