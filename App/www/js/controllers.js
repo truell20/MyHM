@@ -28,7 +28,7 @@ angular.module('ApPosition.controllers', [])
 
 	$scope.deleteFriend = function(friend) {
 		$scope.friends.splice($scope.friends.indexOf(friend), 1);
-		removeFriends(friend);
+		removeFriend(friend);
 	};
 
 	$scope.addFriendPrompt = function() {

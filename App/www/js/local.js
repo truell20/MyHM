@@ -1,39 +1,40 @@
+function getLocalJSON(address,blankString) {
+	var string = window.localStorage[address];
+	if (string == null) string = window.localStorage[address] = "{}";
+	return JSON.parse(string);
+}
+
 function getMeetingsLocal() { 
-	return JSON.parse(window.localStorage["meetings"]);
+	return getLocalJSON("meetings","[]");
 }
 
 function getScheduleLocal() { 
-	return JSON.parse(window.localStorage["schedule"]);
+	return getLocalJSON("schedule","[]");
 }
 
 function getPeopleList() {
-	return JSON.parse(window.localStorage["people"]);
+	return getLocalJSON("people","[]");
 }
 
 function getUserLocal() { 
-	return JSON.parse(window.localStorage["user"]); 
+	return getLocalJSON("user","{}");
 }
 
 function getFriends() {
-	return JSON.parse(window.localStorage["friends"]); 
+	return getLocalJSON("friends","[]");
 }
 
 function lookupUser(name) {
 	var people = getPeopleList();
-	var maxPerson;
-	var maxProb = 0;
-	people.forEach(function(person) {
-		for (var result = 0, i = person.name.length; i--;){
-	        if (typeof name[i] == 'undefined' || person.name[i] == name[i]);
-		    else if (person.name[i].toLowerCase() == name[i].toLowerCase()) result++;
-		    else result += 4;
-    	} var prob = 1 - (result + 4*Math.abs(person.name.length - name.length))/(2*(person.name.length+name.length));
-
-    	if (prob > maxProb) {
-    		maxProb = prob;
-    		maxPerson = person;
+	var minPerson;
+	var minProb = 99999;
+	for (var p=0; p<people.length; p++) {
+		var prob = levenshtein(people[p].name,name)
+    	if (prob < minProb) {
+    		minProb = prob;
+    		minPerson = people[p];
     	}
-	}); return maxPerson;
+	} return minPerson;
 }
 
 function addFriend(person) {
