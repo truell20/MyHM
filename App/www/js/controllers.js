@@ -5,7 +5,19 @@ angular.module('ApPosition.controllers', [])
 })
 
 .controller('MakeMeetingCtrl', function($scope) {
-	
+	$scope.query = "";
+	$scope.teachers = [Person.randomPerson(), Person.randomPerson(), Person.randomPerson()];
+	$scope.students = [Person.randomPerson(), Person.randomPerson(), Person.randomPerson()];
+	$scope.sharedFrees = function(people) {
+		var sharedFrees = [];
+		Schedule.forPossiblePeriods(function(day, index) {
+			var inAll = true;			people.forEach(function(person) {
+				if(!person.schedule.getPeriod(day, index).isFree) inAll = false;
+			});
+			if(inAll) sharedFrees.push(Schedule.periodString(day, index));
+		});
+		return sharedFrees;
+	}
 })
 
 .controller('HomeCtrl', function($scope) {
@@ -18,10 +30,7 @@ angular.module('ApPosition.controllers', [])
 	};
 
 	$scope.addFriend = function(friendName) {
-		$scope.friends.push({
-			name: friendName
-		});
-
+		$scope.friends.push({ name: friendName });
         $scope.friendName = "";
     };
 
