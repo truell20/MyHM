@@ -1,4 +1,4 @@
-var url = "http://localhost:80/MyHM/Backend/"
+var url = "http://localhost:80/MyHM/Backend/";
 
 function getUser(userID, email, password) {
 	return $http({
