@@ -19,6 +19,8 @@ angular.module('ApPosition.controllers', [])
 
 	$scope.addFriend = function(friendName) {
 		var friend = lookupUser(friendName);
+		
+		addFriend(friend);
 		$scope.friends.push(friend);
 
         $scope.friendName = "";
@@ -26,29 +28,24 @@ angular.module('ApPosition.controllers', [])
 
 	$scope.deleteFriend = function(friend) {
 		$scope.friends.splice($scope.friends.indexOf(friend), 1);
+		removeFriends(friend);
 	};
 
 	$scope.addFriendPrompt = function() {
-	   var promptPopup = $ionicPopup.prompt({
-	      title: 'Add Friend',
-	      template: "Enter your friend's name."
-	   });
-	   promptPopup.then(function(res) {
-	      if (res) {
-	         $scope.addFriend(res);
-	      }
-	   });
+		var promptPopup = $ionicPopup.prompt({
+			title: 'Add Friend',
+			template: "Enter your friend's name."
+		});
+		promptPopup.then(function(res) {
+			if (res) $scope.addFriend(res);
+		});
 	};
 
 	$scope.logout = function() {
 		$location.path('/login');
 	};
 
-	$scope.friends = [
-		{ name: 'Michael Truell' },
-		{ name: 'Luca Koval' },
-		{ name: 'Joshua Gruenstein' }
-	];
+	$scope.friends = getFriends();
 })
 
 .controller('LoginCtrl', function($scope, $cordovaBarcodeScanner,$location) {

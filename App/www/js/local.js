@@ -44,12 +44,8 @@ function addFriend(person) {
 
 function removeFriend(person) {
 	var friends = getFriends();
-	var newFriends;
-	for (int i=0; i<friends.length; i++) {
-		if (friends[i].userID !== person.userID) {
-			newFriends.push(friends[i]);
-		}
-	} window.localStorage["friends"] = JSON.stringify(newFriends);
+	friends.splice(friends.indexOf(person), 1);
+	window.localStorage["friends"] = JSON.stringify(friends);
 }
 
 function storeMeetingsLocal(userID) {
