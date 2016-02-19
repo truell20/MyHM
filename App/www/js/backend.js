@@ -1,84 +1,65 @@
 var url = "http://localhost:80/MyHM/Backend/"
 
 function getUser(userID, email, password) {
-	var result = null;
-	if(userID != null) {
-		$.ajax({
-			url: url+"user",
-			async: false,
-			method: "GET",
-			data: {userID: userID, password: password}
-		})
-	} else if(email != null) {
-		$.ajax({
-			url: url+"user",
-			async: false,
-			method: "GET",
-			data: {email: email, password: password}
-		})
-	}
-
-	return result.responseJSON
+	return $http({
+		method: "GET",
+		url:url+"user",
+		data: {userID: userID, email: email, password: password}
+	});
 }
 
 function searchForUser(searchTerm) {
-	return $.ajax({
+	return $http({
 		url: url+"user",
-		async: false,
 		method: "GET",
 		data: {searchTerm: searchTerm}
-	}).responseJSON;
+	});
 }
 
 function getSchedule(userID) {
-	return $.ajax({
-		url: url+"schedule",
-		async: false,
+	return $http({
 		method: "GET",
+		url:url+"schedule",
 		data: {userID: userID}
-	}).responseJSON;
-}
+	});
 
 function getUserMeetings(userID) {
-	return $.ajax({
+	return $http({
 		url: url+"meeting",
-		async: false,
 		method: "GET",
 		data: {userID: userID}
-	}).responseJSON;
+	});
 }
 
 function getMeeting(meetingID) {
-	return $.ajax({
+	return $http({
 		url: url+"meeting",
-		async: false,
 		method: "GET",
 		data: {meetingID: meetingID}
-	}).responseJSON;
+	});
 }
 
-function storeUserSession(userID, email, password, async) {
-	if(userID != null && password != null) {
-		var result = $.ajax({
-			url: url+"session", 
-			async: async,
-			method: "POST",
-			data: {userID: userID, password: password}
-		});
-	} else if(email != null && password != null) {
-		var result = $.ajax({
-			url: url+"session", 
-			async: async,
-			method: "POST",
-			data: {email: email, password: password},
-			error: function(xhr, status, error) {
-				console.log(xhr.responseText);
-			}
-		});
-	}
+// Local storage
+function getMeetingsLocal() { return window.localStorage["meetings"]; }
+function getScheduleLocal() { return window.localStorage["schedule"]; }
+function getFriendsMeetings() { return window.localStorage["friendsMeetings"]; }
+function getUserLocal() { return window.localStorage["user"]; }
+
+function storeMeetingsLocal(userID) {
+	window.localStorage["meetings"] = JSON.stringify(getUserMeetings(userID));
 }
 
-function locallyStoreInfo(userID) {
-	window.localStorage['meetings'] = JSON.stringify(getUserMeetings(userID))
-	window.localStorage['schedule'] = JSON.stringify(getSchedule(userID))
+function storeScheduleLocal(userID) {
+	window.localStorage["schedule"] = JSON.stringify(getSchedule(userID));
+}
+
+function storeFriendSchedule(friendID) {
+	var friendsMeetings = getFriendsMeetings();
+	friendsMeetings.push(getUserMeetings(userID));
+
+	window.localStorage["friendsMeetings"] = JSON.stringify(friendsMeetings);
+}
+
+function storeUserLocal(userID, password) {
+	window.localStorage["user"] = getUser(userID, null, password);
 }
