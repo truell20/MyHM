@@ -18,9 +18,8 @@ angular.module('ApPosition.controllers', [])
 	};
 
 	$scope.addFriend = function(friendName) {
-		$scope.friends.push({
-			name: friendName
-		});
+		var friend = lookupUser(friendName);
+		$scope.friends.push(friend);
 
         $scope.friendName = "";
     };

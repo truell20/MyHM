@@ -38,28 +38,3 @@ function getMeeting(meetingID) {
 		data: {meetingID: meetingID}
 	});
 }
-
-// Local storage
-function getMeetingsLocal() { return window.localStorage["meetings"]; }
-function getScheduleLocal() { return window.localStorage["schedule"]; }
-function getFriendsMeetings() { return window.localStorage["friendsMeetings"]; }
-function getUserLocal() { return window.localStorage["user"]; }
-
-function storeMeetingsLocal(userID) {
-	window.localStorage["meetings"] = JSON.stringify(getUserMeetings(userID));
-}
-
-function storeScheduleLocal(userID) {
-	window.localStorage["schedule"] = JSON.stringify(getSchedule(userID));
-}
-
-function storeFriendSchedule(friendID) {
-	var friendsMeetings = getFriendsMeetings();
-	friendsMeetings.push(getUserMeetings(userID));
-
-	window.localStorage["friendsMeetings"] = JSON.stringify(friendsMeetings);
-}
-
-function storeUserLocal(userID, password) {
-	window.localStorage["user"] = getUser(userID, null, password);
-}
