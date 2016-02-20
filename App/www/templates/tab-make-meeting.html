@@ -8,26 +8,18 @@
 		</div>
 
 		<div class="list list-inset">
-			<div class="item item-divider">
-				Teachers
-			</div>
 
-			<div ng-repeat="teacher in teachers | filter:query" class="item item-checkbox">
-				<label class="checkbox">
-					<input type="checkbox">
-				</label>
-				{{ teacher.name }}
-			</div>
+			<div ng-repeat="header in headings">
+				<div class="item item-divider">
+				{{ header.name }}
+				</div>
 
-			<div class="item item-divider">
-				Students
-    		</div>
-
-			<div ng-repeat="student in students | filter:query" class="item item-checkbox">
-				<label class="checkbox">
-					<input type="checkbox">
-				</label>
-				{{ student.name }}
+				<div ng-repeat="person in header.people | filter:person.isChecked | filter:query" class="item item-checkbox">
+					<label class="checkbox">
+						<input ng-checked="person.isChecked" ng-model="person.isChecked" type="checkbox">
+					</label>
+					{{ person.name }}
+				</div>
 			</div>
 		</div>
 
@@ -37,7 +29,7 @@
 				Shared Frees
 			</div>
 
-			<a ng-repeat="free in sharedFrees(teachers.concat(students))" href="#" class="item item-button-right">
+			<a ng-repeat="free in sharedFrees(checkedPeople())" href="#" class="item item-button-right">
 				<button class="button button-positive">Request</button>
 				{{ free.toString() }}
 			</a>

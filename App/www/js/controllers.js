@@ -6,18 +6,31 @@ angular.module('ApPosition.controllers', [])
 
 .controller('MakeMeetingCtrl', function($scope) {
 	$scope.query = "";
-	$scope.teachers = [Person.randomPerson(), Person.randomPerson(), Person.randomPerson()];
-	$scope.students = [Person.randomPerson(), Person.randomPerson(), Person.randomPerson()];
+	$scope.headings = [{name: "Teachers", people: [Person.randomPerson(), Person.randomPerson(), Person.randomPerson()]}, {name: "Students", people: [Person.randomPerson(), Person.randomPerson(), Person.randomPerson()]}];
+	
+	$scope.checkedPeople = function() {
+		var checkedPeople = [];
+		$scope.headings.forEach(function(header) {
+			header.people.forEach(function(person) {
+				if(person.isChecked) checkedPeople.push(person);
+			});
+		});
+		return checkedPeople;
+	};
+
 	$scope.sharedFrees = function(people) {
+		if(people.length < 1) return;
+
 		var sharedFrees = [];
 		Schedule.forPossiblePeriods(function(day, index) {
-			var inAll = true;			people.forEach(function(person) {
+			var inAll = true;
+			people.forEach(function(person) {
 				if(!person.schedule.getPeriod(day, index).isFree) inAll = false;
 			});
 			if(inAll) sharedFrees.push(Schedule.periodString(day, index));
 		});
 		return sharedFrees;
-	}
+	};
 })
 
 .controller('HomeCtrl', function($scope) {
