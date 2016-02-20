@@ -11,7 +11,7 @@
 
 			<div ng-repeat="header in headings">
 				<div class="item item-divider">
-				{{ header.name }}
+					{{ header.name }}
 				</div>
 
 				<div ng-repeat="person in header.people | filter:person.isChecked | filter:query" class="item item-checkbox">

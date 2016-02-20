@@ -34,7 +34,7 @@ angular.module('ApPosition.controllers', [])
 })
 
 .controller('HomeCtrl', function($scope) {
-	console.log(JSON.parse(window.localStorage['user']))
+
 })
 
 .controller('SettingsCtrl', function($scope,$ionicPopup,$location) {
@@ -43,17 +43,46 @@ angular.module('ApPosition.controllers', [])
 	};
 
 	$scope.addFriend = function(friendName) {
+		function lookupUser(name) {
+			function levenshtein(a, b) {
+				var matrix = [], i, j;
+				for (i = 0; i <= b.length; i++) matrix[i] = [i];
+				for (j = 0; j <= a.length; j++) matrix[0][j] = j;
+				for (i = 1; i <= b.length; i++){
+					for (j = 1; j <= a.length; j++){
+						if (b.charAt(i-1) == a.charAt(j-1)) matrix[i][j] = matrix[i-1][j-1];
+						else matrix[i][j] =  Math.min(matrix[i-1][j-1] + 1,
+											 Math.min(matrix[i][j-1] + 1,
+											 matrix[i-1][j] + 1));
+					}
+				} return matrix[b.length][a.length];
+			}
+
+			var people = local.getPeople();
+			var minPerson = null;
+			var minProb = 99999;
+			for (var p=0; p<people.length; p++) {
+				var prob = levenshtein(people[p].name,name)
+				if (prob < minProb) {
+					minProb = prob;
+					minPerson = people[p];
+				}
+			} return minPerson;
+		}
+
 		var friend = lookupUser(friendName);
 		
-		addFriend(friend);
-		$scope.friends.push(friend);
+		if(friend != null) {
+			local.addFriend(friend);
+			$scope.friends.push(friend);
 
-        $scope.friendName = "";
-    };
+			$scope.friendName = "";
+		}
+	};
 
 	$scope.deleteFriend = function(friend) {
 		$scope.friends.splice($scope.friends.indexOf(friend), 1);
-		removeFriend(friend);
+		local.removeFriend(friend);
 	};
 
 	$scope.addFriendPrompt = function() {
@@ -70,7 +99,7 @@ angular.module('ApPosition.controllers', [])
 		$location.path('/login');
 	};
 
-	$scope.friends = getFriends();
+	$scope.friends = local.getFriends();
 })
 
 .controller('LoginCtrl', function($scope, $cordovaBarcodeScanner,$location) {

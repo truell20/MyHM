@@ -1,49 +1,48 @@
-Local.getLocalJSON = function(address, blankString) {
-	var string = window.localStorage[address];
-	if (string == null) string = window.localStorage[address] = blankString;
-	return JSON.parse(string);
-}
+var local = {
+	getLocalJSON: function(address, blankString) {
+		var string = window.localStorage[address];
+		if (string == null) string = window.localStorage[address] = blankString;
+		return JSON.parse(string);
+	},
 
-Local.getMeetings = function() { 
-	return Local.getLocalJSON("meetings","[]");
-}
+	getMeetings: function() { 
+		return this.getLocalJSON("meetings","[]");
+	},
 
-Local.getSchedule = function() { 
-	return Local.getLocalJSON("schedule","[]");
-}
+	getPeople: function() {
+		return this.getLocalJSON("people","[]");
+	},
 
-Local.getPeople = function() {
-	return Local.getLocalJSON("people","[]");
-}
+	getUser: function() { 
+		return this.getLocalJSON("user","{},");
+	},
 
-Local.getUser = function() { 
-	return Local.getLocalJSON("user","{}");
-}
+	getFriends: function() {
+		return this.getLocalJSON("friends","[]");
+	},
 
-Local.getFriends = function() {
-	return Local.getLocalJSON("friends","[]");
-}
+	addFriend: function(person) {
+		var friends = this.getFriends();
+		console.log(friends)
+		friends.push(person);
+		window.localStorage["friends"] = JSON.stringify(friends);
+	},
 
-Local.addFriend = function(person) {
-	var friends = getFriends();
-	friends.push(person);
-	window.localStorage["friends"] = JSON.stringify(friends);
-}
+	removeFriend: function(person) {
+		var friends = this.getFriends();
+		friends.splice(friends.indexOf(person), 1);
+		window.localStorage["friends"] = JSON.stringify(friends);
+	},
 
-Local.removeFriend = function(person) {
-	var friends = getFriends();
-	friends.splice(friends.indexOf(person), 1);
-	window.localStorage["friends"] = JSON.stringify(friends);
-}
+	storeMeetings: function(userID) {
+		window.localStorage["meetings"] = JSON.stringify(this.getUserMeetings(userID));
+	},
 
-Local.storeMeetings = function(userID) {
-	window.localStorage["meetings"] = JSON.stringify(getUserMeetings(userID));
-}
+	storePeople: function(people) {
+		window.localStorage["people"] = JSON.stringify(this.getPeople(userID));
+	},
 
-Local.storePeople = function(people) {
-	window.localStorage["people"] = JSON.stringify(getPeople(userID));
-}
-
-Local.storeUserLocal = function(userID, password) {
-	window.localStorage["user"] = getUser(userID, null, password);
+	storeUser: function(userID, password) {
+		window.localStorage["user"] = this.getUser(userID, null, password);
+	}
 }
