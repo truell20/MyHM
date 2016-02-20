@@ -29,7 +29,7 @@
 				Shared Frees
 			</div>
 
-			<a ng-repeat="free in sharedFrees(checkedPeople())" href="#" class="item item-button-right">
+			<a ng-repeat="free in Schedule.sharedFrees(checkedPeople())" href="#" class="item item-button-right">
 				<button class="button button-positive">Request</button>
 				{{ free.toString() }}
 			</a>
