@@ -4,24 +4,24 @@ Local.getLocalJSON = function(address, blankString) {
 	return JSON.parse(string);
 }
 
-Local.getMeetingsLocal = function() { 
-	return getLocalJSON("meetings","[]");
+Local.getMeetings = function() { 
+	return Local.getLocalJSON("meetings","[]");
 }
 
-Local.getScheduleLocal = function() { 
-	return getLocalJSON("schedule","[]");
+Local.getSchedule = function() { 
+	return Local.getLocalJSON("schedule","[]");
 }
 
-Local.getPeopleList = function() {
-	return getLocalJSON("people","[]");
+Local.getPeople = function() {
+	return Local.getLocalJSON("people","[]");
 }
 
 Local.getUser = function() { 
-	return getLocalJSON("user","{}");
+	return Local.getLocalJSON("user","{}");
 }
 
 Local.getFriends = function() {
-	return getLocalJSON("friends","[]");
+	return Local.getLocalJSON("friends","[]");
 }
 
 Local.addFriend = function(person) {
@@ -36,12 +36,12 @@ Local.removeFriend = function(person) {
 	window.localStorage["friends"] = JSON.stringify(friends);
 }
 
-Local.storeMeetingsLocal = function(userID) {
+Local.storeMeetings = function(userID) {
 	window.localStorage["meetings"] = JSON.stringify(getUserMeetings(userID));
 }
 
-Local.storeScheduleLocal = function(userID) {
-	window.localStorage["schedule"] = JSON.stringify(getSchedule(userID));
+Local.storePeople = function(people) {
+	window.localStorage["people"] = JSON.stringify(getPeople(userID));
 }
 
 Local.storeUserLocal = function(userID, password) {
