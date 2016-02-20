@@ -18,6 +18,9 @@ function Schedule(periods) {
 	this.getPeriod = function(day, index) {
 		return this.periods[day][index];
 	}
+	this.getDay = function(day) {
+		return this.periods[day];
+	}
 }
 
 Schedule.currentDay = function() {
@@ -38,27 +41,31 @@ Schedule.currentIndex = function() {
 	})
 	return index;
 };
-Schedule.millisUntilNextPeriod = function() {
+Schedule.millisUntilPeriod = function(index) {
 	var currentIndex = Schedule.currentIndex();
-	return 1000*((Schedule.periodTimes[currentIndex+1].hour*60 + Schedule.periodTimes[currentIndex+1].minute) - (Schedule.periodTimes[currentIndex].hour*60 + Schedule.periodTimes[currentIndex].minute));
-}
+	index = index == null ? 1 : index;
+	var newIndex = (currentIndex+index) % 8;
+	return 1000*((Schedule.periodTimes[newIndex].hours*60 + Schedule.periodTimes[newIndex].minutes) - (Schedule.periodTimes[currentIndex].hours*60 + Schedule.periodTimes[currentIndex].minutes));
+};
+Schedule.periodLabel = function(index) {
+	return String.fromCharCode(65+index);
+};
 Schedule.periodString = function(day, index) {
 	return String.fromCharCode(65+index) + " period, " +  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][day%5] + ", day " + day;
-};
-Schedule.forPossiblePeriods = function(callback) {
-	for(var a = 0; a < Schedule.numDays; a++) for(var b = 0; b < Schedule.numPeriods; b++) callback(a, b);
 };
 Schedule.sharedFrees = function(people) {
 	if(people.length < 1) return;
 
 	var sharedFrees = [];
-	Schedule.forPossiblePeriods(function(day, index) {
-		var inAll = true;
-		people.forEach(function(person) {
-			if(!person.schedule.getPeriod(day, index).isFree) inAll = false;
-		});
-		if(inAll) sharedFrees.push(Schedule.periodString(day, index));
-	});
+	for(var a = 0; a < Schedule.numDays; a++) {
+		for(var b = 0; b < Schedule.numPeriods; b++) {
+			var inAll = true;
+			people.forEach(function(person) {
+				if(!person.schedule.getPeriod(day, index).isFree) inAll = false;
+			});
+			if(inAll) sharedFrees.push(Schedule.periodString(day, index));
+		}
+	}
 	return sharedFrees;
 };
 

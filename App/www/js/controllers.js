@@ -17,24 +17,44 @@ angular.module('ApPosition.controllers', [])
 		});
 		return checkedPeople;
 	};
-
-	$scope.sharedFrees = function(people) {
-		if(people.length < 1) return;
-
-		var sharedFrees = [];
-		Schedule.forPossiblePeriods(function(day, index) {
-			var inAll = true;
-			people.forEach(function(person) {
-				if(!person.schedule.getPeriod(day, index).isFree) inAll = false;
-			});
-			if(inAll) sharedFrees.push(Schedule.periodString(day, index));
-		});
-		return sharedFrees;
-	};
 })
 
 .controller('HomeCtrl', function($scope) {
+	var user = Person.randomPerson();
+	function getFreeFriends() {
+		return user.getFreeFriends(Schedule.currentDay(), Schedule.currentIndex());;
+	}
 
+	$scope.freeFriends = getFreeFriends();
+
+	// Setup a timer that is called every period, so that we can update free friends
+	function setupInterval(callback) {
+		var interval = window.setInterval(function() {
+			clearInterval(interval);
+			callback();
+		}, Schedule.millisUntilPeriod(), 1);
+	}
+	setupInterval(getFreeFriends);
+
+	// Build the alerts
+	var currentDay = 1;
+	
+	var periodString = user.schedule.getDay(currentDay).map(function(period, index) { 
+		period.index = index; 
+		return period; 
+	}).filter(function(period) { 
+		return period.isFree; 
+	}).map(function(period) { 
+		return Schedule.periodLabel(period.index)
+	}).join(", ");
+
+	$scope.alerts = ["It is Day " + currentDay + ". You are free " + periodString + "."];
+
+	$scope.alerts.concat(local.getMeetings().filter(function(meeting) {
+		return meeting.day == currentDay;
+	}).map(function(meeting) {
+		return "You are meeting with __ at period __.";
+	}));
 })
 
 .controller('SettingsCtrl', function($scope,$ionicPopup,$location) {
