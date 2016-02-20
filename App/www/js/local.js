@@ -44,13 +44,6 @@ Local.storeScheduleLocal = function(userID) {
 	window.localStorage["schedule"] = JSON.stringify(getSchedule(userID));
 }
 
-Local.storeFriendSchedule = function(friendID) {
-	var friendsMeetings = getFriendsMeetings();
-	friendsMeetings.push(getUserMeetings(userID));
-
-	window.localStorage["friendsMeetings"] = JSON.stringify(friendsMeetings);
-}
-
 Local.storeUserLocal = function(userID, password) {
 	window.localStorage["user"] = getUser(userID, null, password);
 }
