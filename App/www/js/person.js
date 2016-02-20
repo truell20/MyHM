@@ -1,10 +1,11 @@
-function Person(userID, name, email, password, schedule, friends) {
+function Person(userID, name, email, password, schedule, friends, meetings) {
 	this.userID = userID;
 	this.name = name;
 	this.email = email;
 	this.password = password;
 	this.schedule = schedule;
 	this.friends = friends;
+	this.meetings = meetings;
 
 	this.getFreeFriends = function(day, index) {
 		console.log(this.friends)

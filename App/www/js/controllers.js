@@ -38,7 +38,7 @@ angular.module('ApPosition.controllers', [])
 
 	// Build the alerts
 	var currentDay = 1;
-	
+
 	var periodString = user.schedule.getDay(currentDay).map(function(period, index) { 
 		period.index = index; 
 		return period; 
@@ -53,7 +53,7 @@ angular.module('ApPosition.controllers', [])
 	$scope.alerts.concat(local.getMeetings().filter(function(meeting) {
 		return meeting.day == currentDay;
 	}).map(function(meeting) {
-		return "You are meeting with __ at period __.";
+		return "You are meeting with "+meeting.people.map(function(person){return person.name}).join(", ")+" at period "+Schedule.periodLabel(meeting.index)+".";
 	}));
 })
 
