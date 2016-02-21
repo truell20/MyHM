@@ -32,5 +32,7 @@ Person.randomPerson = function() {
 	var name = Person.names[nameIndex];
 	Person.names.splice(nameIndex, 1);
 
-	return new Person(1, name, null, null, new Schedule(periods), [Person.randomPerson()]);
+	var person = new Person(1, name, null, null, new Schedule(periods), []);
+	person.meetings = [Meeting.randomMeeting(person)];
+	return person;
 }

@@ -49,12 +49,12 @@ angular.module('ApPosition.controllers', [])
 	}).join(", ");
 
 	$scope.alerts = ["It is Day " + currentDay + ". You are free " + periodString + "."];
-
-	$scope.alerts.concat(local.getMeetings().filter(function(meeting) {
-		return meeting.day == currentDay;
+	$scope.alerts = $scope.alerts.concat(user.meetings.filter(function(meeting) {
+		return meeting.day != -1;
 	}).map(function(meeting) {
-		return "You are meeting with "+meeting.people.map(function(person){return person.name}).join(", ")+" at period "+Schedule.periodLabel(meeting.index)+".";
+		return "You are meeting with "+meeting.people.filter(function(p){return p != user}).map(function(p){return p.name}).join(", ")+" at period "+Schedule.periodLabel(meeting.index)+".";
 	}));
+	console.log($scope.alerts)
 })
 
 .controller('SettingsCtrl', function($scope,$ionicPopup,$location) {
