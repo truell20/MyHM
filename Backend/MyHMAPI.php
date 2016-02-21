@@ -117,6 +117,19 @@ class MyAPI extends API
 			}
 
 			return $returnArray;
+		} else if(isset($_POST['name']) &&
+			isset($_POST['day']) && 
+			isset($_POST['period']) &&
+			isset($_POST['creatorID']) &&
+			isset($_POST['memberIDS'])) {
+
+			$this->insert("INSERT INTO Meeting (name, dayIndex, periodIndex, creatorID) VALUES ('{$_POST['name']}', {$_POST['day']}, {$_POST['index']}, {$_POST['creatorID']})");
+			$meetingArray = $this->select("SELECT meetingID FROM Meeting WHERE creatorID = {$_POST['creatorID']} and dayIndex = {$_POST['day']} and periodIndex = {$_POST['period']}");
+			$meetingID = $meetingArray['meetingID'];
+			foreach($_POST['memberIDS'] as $memberID) {
+				$this->insert("INSERT INTO MeetingToUser (meetingID, userID) VALUES ($meetingID, $memberID)");
+			}
+
 		} else {
 			return NULL;
 		}

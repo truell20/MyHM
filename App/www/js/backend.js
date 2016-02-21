@@ -39,5 +39,13 @@ var backend = {
 			method: "GET",
 			data: {meetingID: meetingID}
 		});
+	},
+
+	storeMeeting: function(name, day, index, memberIDs) {
+		return $http({
+			url: url+"meeting",
+			method: "POST",
+			data: {name: index, day: day, period: index, memberIDs: memberIDs}
+		});
 	}
 }

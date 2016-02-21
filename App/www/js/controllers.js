@@ -5,7 +5,10 @@ angular.module('ApPosition.controllers', [])
 	$scope.peopleString = function(people) {
 		return people.filter(function(p){return p != $scope.user;}).map(function(p){return p.name;}).join(", ");
 	};
-	$scope.periodString = Schedule.periodString;
+	$scope.periodString = function(day, index) {
+		console.log(day + ", " + index)
+		return Schedule.periodLabel(index) + " period, " +  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][day%5] + ", Day " + (day+1);
+	};
 })
 
 .controller('MakeMeetingCtrl', function($scope) {
