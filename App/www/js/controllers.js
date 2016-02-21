@@ -1,7 +1,11 @@
 angular.module('ApPosition.controllers', [])
 
 .controller('MeetingsCtrl', function($scope) {
-	
+	$scope.user = Person.randomPerson();
+	$scope.peopleString = function(people) {
+		return people.filter(function(p){return p != $scope.user;}).map(function(p){return p.name;}).join(", ");
+	};
+	$scope.periodString = Schedule.periodString;
 })
 
 .controller('MakeMeetingCtrl', function($scope) {

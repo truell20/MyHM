@@ -51,7 +51,8 @@ Schedule.periodLabel = function(index) {
 	return String.fromCharCode(65+index);
 };
 Schedule.periodString = function(day, index) {
-	return String.fromCharCode(65+index) + " period, " +  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][day%5] + ", day " + day;
+	console.log(day + ", " + index)
+	return String.fromCharCode(65+index) + " period, " +  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][day%5] + ", Day " + (day+1);
 };
 Schedule.sharedFrees = function(people) {
 	if(people.length < 1) return;

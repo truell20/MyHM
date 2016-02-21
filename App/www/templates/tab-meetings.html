@@ -16,17 +16,11 @@
         	</a>
 		</div>
 
-		<div class="card">
+		<div ng-repeat="meeting in user.meetings" class="card">
 			<div class="item item-text-wrap">
-				<b>D Period, Monday:</b> Meeting with Mr. Truell
+				<b>{{ periodString(meeting.day, meeting.index) }}:</b> Meeting with {{ peopleString(meeting.people) }}
 			</div>
 		</div>
-
-		<div class="card">
-			<div class="item item-text-wrap">
-				<b>E Period, Tuesday:</b> Meeting with Señor Martin
-			</div>
-		</div>	
 
 	</ion-content>
 </ion-view>
