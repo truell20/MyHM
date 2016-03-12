@@ -49,7 +49,7 @@ var backend = {
 		});
 	},
 
-	getBarcode: function (barcode) {
+	getUserWithBarcode: function (barcode) {
 		return $http({
 			url: url+"user",
 			method: "GET",
