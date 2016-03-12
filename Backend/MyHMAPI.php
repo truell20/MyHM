@@ -28,10 +28,10 @@ class MyAPI extends API
 	}
 
 	private function initDB() {
-		$this->mysqli = new mysqli($this->config['hostname'],
-		$this->config['username'],
-		$this->config['password'],
-		$this->config['databaseName']);
+		$this->mysqli = new mysqli( $this->config['hostname'],
+									$this->config['username'],
+									$this->config['password'],
+									$this->config['databaseName']);
 
 		if (mysqli_connect_errno()) {
 			echo "<br><br>There seems to be a problem with our database. Reload the page or try again later.";
@@ -88,6 +88,9 @@ class MyAPI extends API
 			return $this->selectMultiple("SELECT userID, firstName, lastName, email FROM User WHERE
 				LCASE(firstName) LIKE LCASE('%$searchTerm%')
 				OR LCASE(lastName) LIKE LCASE('%$searchTerm%')");
+		} else if (isset($_GET['barcode'])) {
+			$barcode = $_GET['barcode'];
+			return $this->select("SELECT * FROM User WHERE barcode = $barcode");
 		} else {
 			return NULL;
 		}

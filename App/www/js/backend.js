@@ -32,7 +32,7 @@ var backend = {
 			data: {userID: userID}
 		});
 	},
-
+	
 	getMeeting: function(meetingID) {
 		return $http({
 			url: url+"meeting",
@@ -46,6 +46,14 @@ var backend = {
 			url: url+"meeting",
 			method: "POST",
 			data: {name: index, day: day, period: index, memberIDs: memberIDs}
+		});
+	},
+
+	getBarcode: function (barcode) {
+		return $http({
+			url: url+"user",
+			method: "GET",
+			data: {barcode: barcode}
 		});
 	}
 }
