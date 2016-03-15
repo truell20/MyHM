@@ -1,7 +1,9 @@
+var user = Person.randomPerson();
+
 angular.module('ApPosition.controllers', ["ApPosition.services"])
 
 .controller('MeetingsCtrl', function($scope) {
-	$scope.user = $localStorage.getUser();
+	$scope.user = user;
 	$scope.peopleString = function(people) {
 		return people.filter(function(p){return p != $scope.user;}).map(function(p){return p.name;}).join(", ");
 	};
@@ -9,11 +11,18 @@ angular.module('ApPosition.controllers', ["ApPosition.services"])
 		console.log(day + ", " + index)
 		return Schedule.periodLabel(index) + " period, " +  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][day%5] + ", Day " + (day+1);
 	};
+
+	$scope.acceptMeeting = function() {
+		$ionicPopup.alert({
+			title: 'Meeting scheduled.',
+		});
+		$location.path('/tab/home')
+	};
 })
 
-.controller('MakeMeetingCtrl', function($scope) {
+.controller('MakeMeetingCtrl', function($scope, $ionicPopup,$location) {
 	$scope.query = "";
-	$scope.headings = [{name: "Teachers", people: [Person.randomPerson(), Person.randomPerson(), Person.randomPerson()]}, {name: "Students", people: [Person.randomPerson(), Person.randomPerson(), Person.randomPerson()]}];
+	$scope.headings = [{name: "Teachers", people: [Person.sadPerson(), Person.sadPerson(), Person.sadPerson()]}, {name: "Students", people: user.friends}];
 	
 	$scope.checkedPeople = function() {
 		var checkedPeople = [];
@@ -24,14 +33,24 @@ angular.module('ApPosition.controllers', ["ApPosition.services"])
 		});
 		return checkedPeople;
 	};
+
+	$scope.makeMeeting = function() {
+		$ionicPopup.alert({
+			title: 'Meeting requested.',
+			template: 'A meeting request has been sent to the meeting participants.'
+		});
+		$location.path('/tab/home')
+	}
+
+
 })
 
 .controller('HomeCtrl', function($scope, $localStorage) {
-	var user = $localStorage.getUser();
+	$scope.user = user;
 	console.log("User");
-	console.log(user);
+	console.log($scope.user);
 	function getFreeFriends() {
-		return user.getFreeFriends(Schedule.currentDay(), Schedule.currentIndex());;
+		return $scope.user.getFreeFriends(Schedule.currentDay(), Schedule.currentIndex());;
 	}
 
 	$scope.freeFriends = getFreeFriends();
@@ -46,9 +65,9 @@ angular.module('ApPosition.controllers', ["ApPosition.services"])
 	setupInterval(getFreeFriends);
 
 	// Build the alerts
-	var currentDay = 1;
+	var currentDay = 7;
 
-	var periodString = user.schedule.getDay(currentDay).map(function(period, index) { 
+	var periodString = $scope.user.schedule.getDay(currentDay).map(function(period, index) { 
 		period.index = index; 
 		return period; 
 	}).filter(function(period) { 
@@ -58,10 +77,10 @@ angular.module('ApPosition.controllers', ["ApPosition.services"])
 	}).join(", ");
 
 	$scope.alerts = ["It is Day " + currentDay + ". You are free " + periodString + "."];
-	$scope.alerts = $scope.alerts.concat(user.meetings.filter(function(meeting) {
+	$scope.alerts = $scope.alerts.concat($scope.user.meetings.filter(function(meeting) {
 		return meeting.day != -1;
 	}).map(function(meeting) {
-		return "You are meeting with "+meeting.people.filter(function(p){return p != user}).map(function(p){return p.name}).join(", ")+" at period "+Schedule.periodLabel(meeting.index)+".";
+		return "You are meeting with "+meeting.people.filter(function(p){return p != $scope.user}).map(function(p){return p.name}).join(", ")+" at period "+Schedule.periodLabel(meeting.index)+".";
 	}));
 	console.log($scope.alerts)
 })
@@ -133,27 +152,6 @@ angular.module('ApPosition.controllers', ["ApPosition.services"])
 
 .controller('LoginCtrl', function($scope, $cordovaBarcodeScanner,$location,$localStorage) {
 
-	var periods = [];
-	for(var a = 0; a < Schedule.numDays; a++) {
-		var day = [];
-		for(var b = 0; b < Schedule.numPeriods; b++) {
-			if(a == 1 && b == 2) day.push({ name: "Free", isFree: true});
-			else day.push({ name: "Art", isFree: false })
-		}
-		periods.push(day);
-	}
-
-	$localStorage.storeUser(new Person(1, "Michael Truell", "michael_truell@horacemann.org", "oakland2", new Schedule(periods), [], []));
-	console.log($localStorage.getUser());
-	console.log(new Person(1, "Michael Truell", "michael_truell@horacemann.org", "oakland2", new Schedule(periods), [], []));
-
-	var people = [];
-	for(var a = 0; a < 10; a++) {
-		people.push(Person.randomPerson());
-	}
-	console.log(people);
-	$localStorage.storePeople(people);
-
 	$scope.skipLogin = function() {
 		$location.path('/tab/home');
 	};
@@ -162,7 +160,6 @@ angular.module('ApPosition.controllers', ["ApPosition.services"])
 		$cordovaBarcodeScanner.scan().then(function(imageData) {
 			if (imageData.cancelled) return;
 
-			alert(imageData.text);
 			$location.path('/tab/home');
 		}, function(error) {
 			alert("An error happened -> " + error);
