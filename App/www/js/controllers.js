@@ -1,7 +1,7 @@
-angular.module('ApPosition.controllers', [])
+angular.module('ApPosition.controllers', ["ApPosition.services"])
 
 .controller('MeetingsCtrl', function($scope) {
-	$scope.user = Person.randomPerson();
+	$scope.user = $localStorage.getUser();
 	$scope.peopleString = function(people) {
 		return people.filter(function(p){return p != $scope.user;}).map(function(p){return p.name;}).join(", ");
 	};
@@ -26,8 +26,10 @@ angular.module('ApPosition.controllers', [])
 	};
 })
 
-.controller('HomeCtrl', function($scope) {
-	var user = Person.randomPerson();
+.controller('HomeCtrl', function($scope, $localStorage) {
+	var user = $localStorage.getUser();
+	console.log("User");
+	console.log(user);
 	function getFreeFriends() {
 		return user.getFreeFriends(Schedule.currentDay(), Schedule.currentIndex());;
 	}
@@ -64,7 +66,7 @@ angular.module('ApPosition.controllers', [])
 	console.log($scope.alerts)
 })
 
-.controller('SettingsCtrl', function($scope,$ionicPopup,$location) {
+.controller('SettingsCtrl', function($scope, $ionicPopup, $location, $localStorage) {
 	$scope.data = {
 		showDelete: false
 	};
@@ -85,7 +87,7 @@ angular.module('ApPosition.controllers', [])
 				} return matrix[b.length][a.length];
 			}
 
-			var people = local.getPeople();
+			var people = $localStorage.getPeople();
 			var minPerson = null;
 			var minProb = 99999;
 			for (var p=0; p<people.length; p++) {
@@ -100,7 +102,7 @@ angular.module('ApPosition.controllers', [])
 		var friend = lookupUser(friendName);
 		
 		if(friend != null) {
-			local.addFriend(friend);
+			$localStorage.addFriend(friend);
 			$scope.friends.push(friend);
 
 			$scope.friendName = "";
@@ -109,7 +111,7 @@ angular.module('ApPosition.controllers', [])
 
 	$scope.deleteFriend = function(friend) {
 		$scope.friends.splice($scope.friends.indexOf(friend), 1);
-		local.removeFriend(friend);
+		$localStorage.removeFriend(friend);
 	};
 
 	$scope.addFriendPrompt = function() {
@@ -126,18 +128,33 @@ angular.module('ApPosition.controllers', [])
 		$location.path('/login');
 	};
 
-	$scope.friends = local.getFriends();
+	$scope.friends = $localStorage.getFriends();
 })
 
-.controller('LoginCtrl', function($scope, $cordovaBarcodeScanner,$location) {
-	$scope.skipLogin = function() {
-		window.localStorage['user'] = JSON.stringify({
-			email: "michael_truell@horacemann.org", 
-			firstName: "Michael", 
-			lastName: "Truell",
-			password: "sa3tHJ3/KuYvI"
-		});
+.controller('LoginCtrl', function($scope, $cordovaBarcodeScanner,$location,$localStorage) {
 
+	var periods = [];
+	for(var a = 0; a < Schedule.numDays; a++) {
+		var day = [];
+		for(var b = 0; b < Schedule.numPeriods; b++) {
+			if(a == 1 && b == 2) day.push({ name: "Free", isFree: true});
+			else day.push({ name: "Art", isFree: false })
+		}
+		periods.push(day);
+	}
+
+	$localStorage.storeUser(new Person(1, "Michael Truell", "michael_truell@horacemann.org", "oakland2", new Schedule(periods), [], []));
+	console.log($localStorage.getUser());
+	console.log(new Person(1, "Michael Truell", "michael_truell@horacemann.org", "oakland2", new Schedule(periods), [], []));
+
+	var people = [];
+	for(var a = 0; a < 10; a++) {
+		people.push(Person.randomPerson());
+	}
+	console.log(people);
+	$localStorage.storePeople(people);
+
+	$scope.skipLogin = function() {
 		$location.path('/tab/home');
 	};
 

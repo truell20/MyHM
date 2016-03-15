@@ -6,13 +6,12 @@ function Person(userID, name, email, password, schedule, friends, meetings) {
 	this.schedule = schedule;
 	this.friends = friends;
 	this.meetings = meetings;
-
 	this.getFreeFriends = function(day, index) {
 		console.log(this.friends)
 		return this.friends.filter(function(friend) {
 			return friend.isFree;
 		});
-	}
+	};
 }
 
 Person.names = ["Fred", "Lisa", "Ben", "Josh", "Michael", "Teddy", "Luca", "Stephanie", "Henry", "Danah", "Nick"];
@@ -33,6 +32,6 @@ Person.randomPerson = function() {
 	Person.names.splice(nameIndex, 1);
 
 	var person = new Person(1, name, null, null, new Schedule(periods), []);
-	person.meetings = [Meeting.randomMeeting(person)];
+	//person.meetings = [Meeting.randomMeeting(person)];
 	return person;
 }
