@@ -6,13 +6,14 @@ function Person(userID, name, email, password, schedule, friends, meetings) {
 	this.schedule = schedule;
 	this.friends = friends;
 	this.meetings = meetings;
-	this.getFreeFriends = function(day, index) {
-		console.log(this.friends)
-		return this.friends.filter(function(friend) {
-			return friend.isFree;
-		});
-	};
 }
+
+Person.prototype.getFreeFriends = function(day, index) {
+	console.log(this.friends)
+	return this.friends.filter(function(friend) {
+		return friend.isFree;
+	});
+};
 
 Person.names = ["Fred", "Lisa", "Ben", "Josh", "Michael", "Teddy", "Luca", "Stephanie", "Henry", "Danah", "Nick"];
 Person.randomPerson = function() {
